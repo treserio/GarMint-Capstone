@@ -1,0 +1,5 @@
+{
+  "AppSyncApiName": "GarMint",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false
+}

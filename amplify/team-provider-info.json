@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-garmint-staging-22557-authRole",
+      "UnauthRoleArn": "arn:aws:iam::698224863384:role/amplify-garmint-staging-22557-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::698224863384:role/amplify-garmint-staging-22557-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-garmint-staging-22557-deployment",
+      "UnauthRoleName": "amplify-garmint-staging-22557-unauthRole",
+      "StackName": "amplify-garmint-staging-22557",
+      "StackId": "arn:aws:cloudformation:us-east-2:698224863384:stack/amplify-garmint-staging-22557/4e3ab1a0-7e7b-11ed-b040-0a17a52b0664",
+      "AmplifyAppId": "d2sl9zlv92ca7q"
+    },
+    "categories": {
+      "auth": {
+        "GarMint": {}
+      }
+    }
+  }
+}
