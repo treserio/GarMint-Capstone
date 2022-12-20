@@ -1,14 +1,22 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import Link from 'next/link'
-import { Amplify } from 'aws-amplify'
-import config from '../aws-exports'
 import Head from 'next/head'
+import Link from 'next/link'
+
+import { Amplify } from 'aws-amplify'
+import { Auth } from '@aws-amplify/auth'
+import config from '../aws-exports'
+
+import { useState } from 'react'
+import AuthContext from '../contexts/authContext'
+
+
 Amplify.configure({ ...config, ssr: true })
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState(null)
 
-
+  console.log('appRender', user)
 
   return (
     <>
@@ -18,29 +26,25 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <nav className='bg-red-300'>
-          <Link href="/">
-            <span className='bg-green-300'>Home</span>
-          </Link>
-          <Link href="/protected">
-            <span className='bg-orange-300'>Protected</span>
-          </Link>
-          <Link href="/protected-client-route">
-            <span className=''>Protected client route</span>
-          </Link>
-        </nav>
-      <Component {...pageProps} />
-      </div>
+      {user && (
+      <nav className='bg-red-300'>
+        <Link href="/">
+          <span className='bg-green-300'>Home</span>
+        </Link>
+        <Link href="/protected">
+          <span className='bg-orange-300'>Protected</span>
+        </Link>
+        <Link href="/protected-client-route">
+          <span className=''>Protected client route</span>
+        </Link>
+        <button onClick={async () => {
+          await Auth.signOut()
+          setUser(null)
+        }}>Sign out</button>
+      </nav>)}
+      <AuthContext.Provider value={{user, setter: setUser}}>
+        <Component {...pageProps} />
+      </AuthContext.Provider>
     </>
   )
 }
-
-// const linkStyle = css`
-//   margin-right: 20px;
-//   cursor: pointer;
-// `
-
-// const navStyle = css`
-//   display: flex;
-// `
