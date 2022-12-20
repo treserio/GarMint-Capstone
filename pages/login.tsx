@@ -10,7 +10,7 @@ function Login() {
     Auth.currentAuthenticatedUser()
       .then(user => {
         console.log('User:', user.username)
-        console.log(user)
+        // console.log(user)
         updateUser(user)
       })
       .catch(err => updateUser(null))
@@ -20,6 +20,7 @@ function Login() {
     <div className='grid h-screen place-items-center'>
         <Authenticator>
         {({ signOut, user }) => (
+            // setup context value for user and signOut to be used throughout the app
             <main>
             <h2>hello, {user!.attributes!.name}</h2>
             <button onClick={signOut}>Sign out</button>
