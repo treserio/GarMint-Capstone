@@ -1,3 +1,7 @@
+Will need to include how to get the aws-export file from the amplify console
+[]: # Path: README.md
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
