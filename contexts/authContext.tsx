@@ -1,14 +1,10 @@
 import { createContext } from 'react'
 
-class junk {
+class authorizedUser {
   user: any
   setter: any
 }
 
-const thing = new junk()
-
-const AuthContext = createContext(
-  thing
+export default createContext(
+  new authorizedUser()
 )
-
-export default AuthContext

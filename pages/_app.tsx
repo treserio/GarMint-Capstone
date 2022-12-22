@@ -9,14 +9,16 @@ import config from '../aws-exports'
 
 import { useState } from 'react'
 import AuthContext from '../contexts/authContext'
+import { useRouter } from 'next/router'
 
 
 Amplify.configure({ ...config, ssr: true })
 
 export default function App({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState(null)
+  const router = useRouter()
 
-  console.log('appRender', user)
+  // console.log('appRender', user)
 
   return (
     <>
@@ -40,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <button onClick={async () => {
           await Auth.signOut()
           setUser(null)
+          router.push('/')
         }}>Sign out</button>
       </nav>)}
       <AuthContext.Provider value={{user, setter: setUser}}>
