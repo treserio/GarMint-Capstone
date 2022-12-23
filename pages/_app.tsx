@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 
 Amplify.configure({ ...config, ssr: true })
 
+
 export default function App({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState(null)
   const router = useRouter()

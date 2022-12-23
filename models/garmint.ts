@@ -1,51 +1,53 @@
 import { v4 } from 'uuid'
 
 interface GarmintInterface {
-  id: String
+  owner_id: String
+  item_number: number
+  type: String
   colors: String
   styles: String
-  uses: number
   temperature: number
   image: String
+  uses: number
 }
-
+// owner_id is the primary key, with iterative item number as sort value
 class Garmint implements GarmintInterface {
-  id: String
+  owner_id: String
+  item_number: number
+  type: String
   colors: String
   styles: String
-  uses: number
   temperature: number
   image: String
+  uses: number
 
   constructor(
-    id?: String,
+    owner_id?: String,
+    item_number?: number,
+    type?: String,
     colors?: String,
     styles?: String,
-    uses?: number,
     temperature?: number,
     image?: String,
+    uses?: number,
   ) {
-    this.id = id ? id : v4()
+    this.owner_id = owner_id ? owner_id : ''
+    this.item_number = item_number ? item_number : v4()
+    this.type = type ? type : ''
     this.colors = colors ? colors : ''
     this.styles = styles ? styles : ''
-    this.uses = uses ? uses : 1
+    // may need to handle a celsius or farenhiet switch
+    // maybe find the temperature type of the device?
     this.temperature = temperature ? temperature : 65
     this.image = image ? image : ''
+    this.uses = uses ? uses : 1
   }
 
   toJson(): any {return JSON.stringify(this)}
 
-  fromDynamo(item: object): Garmint {
-    return new Garmint()
+  public static fromJson(item: object): Garmint {
+    return Object.assign(new Garmint(), item)
   }
-
-  // initialize garmint from json example
-  // const item = Object.assign(new Garmint(), {
-  //   id: '99',
-  //   colors: ['red'],
-  //   style: ['casual'],
-  //   uses: 1,
-  // })
 }
 
 export default Garmint
