@@ -5,7 +5,8 @@ const CAPTURE_OPTIONS = {
   video: { facingMode: "user" },
 };
 
-export const useUserMedia = (requestedMedia) => {
+function useUserMedia(requestedMedia) {
+
   const [mediaStream, setMediaStream] = useState(null);
 
   const handleSuccess = useCallback((stream) => {
@@ -41,3 +42,5 @@ export const useUserMedia = (requestedMedia) => {
 
   return mediaStream;
 }
+
+export default useUserMedia;

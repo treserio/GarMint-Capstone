@@ -1,4 +1,11 @@
+// import  useUserMedia  from '../ui-components/access_cam.js';
+import Camera from './camera';
+import { useState } from 'react';
+
 function FirstTimeLoginInput() {
+
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const toggleCam = () => setIsCameraOpen(!isCameraOpen);
 
     return (
         <>
@@ -39,9 +46,11 @@ function FirstTimeLoginInput() {
             <div className="flex flex-col items-center justify-center ">
                 <h2 className="text-center font-semibold">Now lets get your closet set up for the AI</h2>
                 <button  className="button button:hover button:focus mt-2"
-                onClick={() => {}}>Scan Items</button>
+
+                onClick={() => toggleCam() }>Scan Items</button>
 
             </div>
+            {isCameraOpen && <Camera />}
         </div>
         </>
         );
