@@ -1,22 +1,24 @@
-import { useContext, useState } from 'react'
-import AppInfo from '../contexts/appContext'
+import { useContext, useState, useEffect } from 'react'
+import AppContext from '../contexts/appContext'
+
 
 export default function Test(props: any) {
-  const appInfo = useContext(AppInfo)
-  const { bottoms } = useContext(AppInfo)
-  // const [ appState, appStateSet] = useState(appInfo)
-  const [ appState, appStateSet] = useState(bottoms)
+  const { appContext } = useContext(AppContext)
+  const [garmintCount, setGarmintCount] = useState(appContext.garmintCount)
 
-  console.log('test context', appInfo.bottoms)
-  console.log('test state', appState)
-  setTimeout(() => console.log('delayed', appInfo.bottoms), 600)
+  console.log('init test', appContext.garmintCount)
+  // console.log('test state', appState)
+  setTimeout(() => console.log('delayed', appContext.garmintCount, appContext.bottoms, garmintCount), 1000)
+
+  useEffect(() => {
+    // have to pass the setGarmintCount to ensure this component re-renders on change
+    if (appContext.garmintCount === 0) appContext.getUserGarmints(setGarmintCount)
+  })
 
   return (
     <>
-      {appState &&
-        appState.map((item) => {
-          return <div>{item.styles}</div>
-        })
+      {appContext.garmintCount != 0 &&
+        appContext.bottoms.map((item) => (<div>{item.styles}</div>))
       }
       {props.children}
     </>

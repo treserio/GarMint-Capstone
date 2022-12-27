@@ -4,34 +4,29 @@ import Link from 'next/link'
 import Router from 'next/router'
 import AuthContext from '../contexts/authContext'
 import { Authenticator } from '@aws-amplify/ui-react'
-import { useContext, useEffect, useState } from 'react'
-import AppContext, { AppInfo } from '../contexts/appContext'
+import { useContext } from 'react'
+
 import Test from './test'
 
 
 export default function Home() {
-  const { user, setter } = useContext(AuthContext)
-  const appInfo: AppInfo = new AppInfo()
+  const { user, setUser } = useContext(AuthContext)
+  // const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
 
-  const [ appState, appStateSetter ] = useState(appInfo)
-  useEffect(() => {
-    if (user) {
-      appInfo.getUserGarmints()
-    }
-  })
-
+  // useEffect(() => {
+  //   appContext.getUserGarmints(setGarmintCount)
+  // }, [user])
 
   return (
     <>
-      {user ? <AppContext.Provider value={appState}>
+      {user ?
         <Test>
           <p>bullshit</p>
         </Test>
-      </AppContext.Provider>
       : <div className='grid h-screen place-items-center'>
           <Authenticator>
             {({ user }) => {
-              setter(user)
+              setUser(user)
               return <></>
             }}
           </Authenticator>

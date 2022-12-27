@@ -1,10 +1,13 @@
 import { createContext } from 'react'
 
-class authorizedUser {
+class AuthInfo {
   user: any
-  setter: any
+  setUser: Function
+
+  constructor() {
+    this.user = null
+    this.setUser = () => {}
+  }
 }
 
-export default createContext(
-  new authorizedUser()
-)
+export default createContext(new AuthInfo())
