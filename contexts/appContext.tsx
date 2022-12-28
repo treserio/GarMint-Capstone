@@ -4,6 +4,11 @@ import { DynamoDB } from 'aws-sdk'
 import { Auth } from 'aws-amplify'
 import awskeys from './awskeys.json'
 
+interface Temperature {
+  high: number,
+  low: number,
+  avg: number,
+}
 
 export class AppInfo {
   // db access
@@ -14,7 +19,7 @@ export class AppInfo {
   garmintTypes: Array<String>
   garmintCount: number
   // get from weather api
-  temperature: number
+  temperature: Temperature
   weather: Array<String>
 
   constructor() {
@@ -22,8 +27,8 @@ export class AppInfo {
     this.db = new DynamoDB.DocumentClient({
       region: 'us-east-2',
       credentials: {
-        accessKeyId: awskeys.AWS_ACCESS_KEY_ID,
-        secretAccessKey: awskeys.AWS_SECRET_ACCESS_KEY
+        accessKeyId: awskeys.tofer.AWS_ACCESS_KEY_ID,
+        secretAccessKey: awskeys.tofer.AWS_SECRET_ACCESS_KEY
       }
     })
     // db tables
@@ -32,11 +37,11 @@ export class AppInfo {
     this.garmintCount = 0
     this.garmintTypes = ['tops', 'bottoms']
     // get from weather api
-    this.temperature = 70
+    this.temperature = { high: 0, low: 0, avg: 0 }
     this.weather = ['rainy', 'cloudy']
   }
 
-  async getUserGarmints(setGarmintCount: any) {
+  async getUserGarmints(setGarmintCount: any): Promise<void> {
     const user = await Auth.currentAuthenticatedUser()
     console.log('getUserGarmints #=', this.garmintCount)
     if (user && this.garmintCount === 0) {
@@ -73,6 +78,12 @@ export class AppInfo {
 
       })
     }
+  }
+
+  async getWeatherInfo(): Promise<Temperature> {
+
+
+    return { high: 0, low: 0, avg: 0 }
   }
 }
 

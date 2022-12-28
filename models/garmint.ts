@@ -9,6 +9,7 @@ interface GarmintInterface {
   temperature: number
   image: String
   uses: number
+  worn: number
 }
 // owner_id is the primary key, with iterative item number as sort value
 class Garmint implements GarmintInterface {
@@ -20,6 +21,7 @@ class Garmint implements GarmintInterface {
   temperature: number
   image: String
   uses: number
+  worn: number
 
   constructor(
     owner_id?: String,
@@ -30,6 +32,7 @@ class Garmint implements GarmintInterface {
     temperature?: number,
     image?: String,
     uses?: number,
+    worn?: number,
   ) {
     this.owner_id = owner_id ? owner_id : ''
     this.item_number = item_number ? item_number : v4()
@@ -41,6 +44,7 @@ class Garmint implements GarmintInterface {
     this.temperature = temperature ? temperature : 65
     this.image = image ? image : ''
     this.uses = uses ? uses : 1
+    this.worn = worn ? worn : 0
   }
 
   toJson(): any {return JSON.stringify(this)}
