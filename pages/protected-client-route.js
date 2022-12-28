@@ -11,6 +11,7 @@ function ProtectedClient() {
       // if there is no authenticated user, redirect to profile page
       .catch(() => router.push('/'))
   }, [])
+
   if (!user) return null
   return <h1>Hello {user.username} from client route!</h1>
 }
