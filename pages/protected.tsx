@@ -4,7 +4,7 @@ import AppContext from '../contexts/appContext';
 import { useContext } from 'react'
 
 function Protected({ authenticated, username }: { authenticated: boolean; username: String }) {
-  const appContext = useContext(AppContext)
+  const { appContext } = useContext(AppContext)
   const router = useRouter()
 
   console.log(appContext.garmintCount)

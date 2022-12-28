@@ -18,7 +18,7 @@ export default function Test(props: any) {
   return (
     <>
       {appContext.garmintCount != 0 &&
-        appContext.bottoms.map((item) => (<div>{item.styles}</div>))
+        appContext.bottoms.map((item) => (<div key={item.owner_id + item.item_number.toString()}>{item.styles}</div>))
       }
       {props.children}
     </>
