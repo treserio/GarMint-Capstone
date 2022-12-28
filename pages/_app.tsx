@@ -2,22 +2,45 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Link from 'next/link'
-
+import { useRouter } from 'next/router'
+// aws services
 import { Amplify } from 'aws-amplify'
 import { Auth } from '@aws-amplify/auth'
 import config from '../aws-exports'
-
+// context
 import { useState } from 'react'
 import AuthContext from '../contexts/authContext'
-
+import AppContext, { AppInfo } from '../contexts/appContext'
 
 Amplify.configure({ ...config, ssr: true })
 
+const appInfo = new (AppInfo)
+
+
+/*
+Open-Meteo api for weather info
+https://api.open-meteo.com/v1/forecast?
+latitude=36.03
+&longitude=-95.83
+&hourly=temperature_2m,apparent_temperature,precipitation,weathercode
+&current_weather=true
+&temperature_unit=fahrenheit
+&windspeed_unit=mph
+&timezone=America%2FChicago
+
+we need from the device:
+device geolocation
+speed unit, mph, kmph
+tiemzone info
+*/
 export default function App({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState(null)
+  const [appContext, setAppContext] = useState(appInfo)
+  const router = useRouter()
 
-  console.log('appRender', user)
-
+  // console.log('appRender', user)
+  // probably need to set the context provider here, along with the ability to zero out values on signout
+  console.log('APP RENDERING', appContext)
   return (
     <>
       <Head>
@@ -40,10 +63,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <button onClick={async () => {
           await Auth.signOut()
           setUser(null)
+          setAppContext(new AppInfo())
+          router.push('/')
         }}>Sign out</button>
       </nav>)}
-      <AuthContext.Provider value={{user, setter: setUser}}>
-        <Component {...pageProps} />
+      <AuthContext.Provider value={{user, setUser}}>
+        <AppContext.Provider value={{appContext, setAppContext}}>
+          <Component {...pageProps} />
+        </AppContext.Provider>
       </AuthContext.Provider>
     </>
   )
