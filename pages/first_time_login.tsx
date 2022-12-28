@@ -1,5 +1,6 @@
 // import  useUserMedia  from '../ui-components/access_cam.js';
-import Camera from './camera';
+// import Camera from './camera';
+import CamApp from '../components/camApp.js';
 import { useState } from 'react';
 
 function FirstTimeLoginInput() {
@@ -50,7 +51,7 @@ function FirstTimeLoginInput() {
                 onClick={() => toggleCam() }>Scan Items</button>
 
             </div>
-            {isCameraOpen && <Camera />}
+            {isCameraOpen && <CamApp />}
         </div>
         </>
         );
