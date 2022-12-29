@@ -13,12 +13,12 @@ export default function Test(props: any) {
   useEffect(() => {
     // have to pass the setGarmintCount to ensure this component re-renders on change
     if (appContext.garmintCount === 0) appContext.getUserGarmints(setGarmintCount)
-  })
+  },[appContext])
 
   return (
     <>
       {appContext.garmintCount != 0 &&
-        appContext.bottoms.map((item) => (<div>{item.styles}</div>))
+        appContext.bottoms.map((item) => (<div key={item.owner_id + item.item_number.toString()}>{item.item_number}</div>))
       }
       {props.children}
     </>
