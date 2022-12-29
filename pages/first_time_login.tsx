@@ -1,6 +1,6 @@
 // import  useUserMedia  from '../ui-components/access_cam.js';
 // import Camera from './camera';
-import CamApp from '../components/camApp.js';
+import CamApp from '../components/camApp';
 import { useState } from 'react';
 
 function FirstTimeLoginInput() {

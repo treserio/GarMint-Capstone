@@ -42,7 +42,12 @@ export class AppInfo {
   }
 
   async getUserGarmints(setGarmintCount: any): Promise<void> {
-    const user = await Auth.currentAuthenticatedUser()
+    let user = null
+    try {
+      user = await Auth.currentAuthenticatedUser()
+    } catch (e) {
+      // console.log(e)
+    }
     console.log('getUserGarmints #=', this.garmintCount)
     if (user && this.garmintCount === 0) {
       // stop the query from running multiple times, and 0 on error, else add correct val
