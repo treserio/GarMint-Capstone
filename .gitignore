@@ -57,4 +57,5 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 
-*awskeys.json*
+*awskeys.json
+*roboflowKey.json

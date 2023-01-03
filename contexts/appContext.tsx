@@ -2,7 +2,7 @@ import Garmint from "../models/garmint"
 import { createContext } from 'react'
 import { DynamoDB } from 'aws-sdk'
 import { Auth } from 'aws-amplify'
-import awskeys from './awskeys.json'
+import awskeys from '../certificates/awskeys.json'
 
 interface Temperature {
   high: number,
@@ -39,6 +39,7 @@ export class AppInfo {
     // get from weather api
     this.temperature = { high: 0, low: 0, avg: 0 }
     this.weather = ['rainy', 'cloudy']
+    // stretch goal of working hours, maybe when you sleep
   }
 
   async getUserGarmints(setGarmintCount: any): Promise<void> {
@@ -48,7 +49,7 @@ export class AppInfo {
     } catch (e) {
       // console.log(e)
     }
-    console.log('getUserGarmints #=', this.garmintCount)
+    // console.log('getUserGarmints #=', this.garmintCount)
     if (user && this.garmintCount === 0) {
       // stop the query from running multiple times, and 0 on error, else add correct val
       this.garmintCount = 1
@@ -63,7 +64,7 @@ export class AppInfo {
         },
       }
       // run query and use data in callback
-      console.log('\nRunningQuery\n')
+      // console.log('\nRunningQuery\n')
       this.db.query(params, (err, data) => {
         if (data?.Count != 0) {
           this.tops = data!.Items!.filter((item: any) => item.type == 'top')
@@ -72,15 +73,16 @@ export class AppInfo {
             .map((item) => Garmint.fromJson(item))
           setGarmintCount(data.Count)
           this.garmintCount = data.Count!
+        } else {
+          this.garmintCount = 0
         }
-        console.log('tops:', this.tops)
-        console.log('bottoms:', this.bottoms)
-        console.log('garmintCount', this.garmintCount)
+        // console.log('tops:', this.tops)
+        // console.log('bottoms:', this.bottoms)
+        // console.log('garmintCount', this.garmintCount)
         if (err) {
           console.log('getUserGarmints Error:', err)
           this.garmintCount = 0
         }
-
       })
     }
   }

@@ -1,7 +1,7 @@
 // import  useUserMedia  from '../ui-components/access_cam.js';
 // import Camera from './camera';
-import CamApp from '../components/camApp';
-import { useState } from 'react';
+import GarmintCam from '../ui-components/garmintCam'
+import { useState } from 'react'
 
 function FirstTimeLoginInput() {
 
@@ -51,7 +51,7 @@ function FirstTimeLoginInput() {
                 onClick={() => toggleCam() }>Scan Items</button>
 
             </div>
-            {isCameraOpen && <CamApp />}
+            {isCameraOpen && <GarmintCam toggleCam={toggleCam}/>}
         </div>
         </>
         );
