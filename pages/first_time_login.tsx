@@ -4,7 +4,7 @@ import CamApp from '../components/camApp.js';
 import { Auth } from '@aws-amplify/auth';
 import { useState, useContext } from 'react';
 
-function FirstTimeLoginInput() {
+export default function FirstTimeLoginInput() {
 
     const [preferred_username, setPreferredName] = useState('');
     const [wash_cycle, setWashCycle] = useState('7');
@@ -124,5 +124,3 @@ function FirstTimeLoginInput() {
     );
 
 }
-
-export default FirstTimeLoginInput;

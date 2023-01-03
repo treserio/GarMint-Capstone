@@ -6,9 +6,11 @@ interface GarmintInterface {
   type: String
   colors: String
   styles: String
-  temperature: number
-  image: String
+  low_temp: number
+  high_temp: number
+  image: string
   uses: number
+  worn: number
 }
 // owner_id is the primary key, with iterative item number as sort value
 class Garmint implements GarmintInterface {
@@ -17,9 +19,11 @@ class Garmint implements GarmintInterface {
   type: String
   colors: String
   styles: String
-  temperature: number
-  image: String
+  low_temp: number
+  high_temp: number
+  image: string
   uses: number
+  worn: number
 
   constructor(
     owner_id?: String,
@@ -27,9 +31,11 @@ class Garmint implements GarmintInterface {
     type?: String,
     colors?: String,
     styles?: String,
-    temperature?: number,
-    image?: String,
+    low_temp?: number,
+    high_temp?: number,
+    image?: string,
     uses?: number,
+    worn?: number,
   ) {
     this.owner_id = owner_id ? owner_id : ''
     this.item_number = item_number ? item_number : v4()
@@ -38,9 +44,11 @@ class Garmint implements GarmintInterface {
     this.styles = styles ? styles : ''
     // may need to handle a celsius or farenhiet switch
     // maybe find the temperature type of the device?
-    this.temperature = temperature ? temperature : 65
+    this.low_temp = low_temp ? low_temp : 50
+    this.high_temp = high_temp ? high_temp : 50
     this.image = image ? image : ''
     this.uses = uses ? uses : 1
+    this.worn = worn ? worn : 0
   }
 
   toJson(): any {return JSON.stringify(this)}
