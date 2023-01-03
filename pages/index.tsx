@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      {user ? user.attributes.preferred_username != 'charley' ? <Test /> : <FirstTimeLoginInput />
+      {user ? user.attributes.preferred_username ? <Test /> : <FirstTimeLoginInput />
       : <div className='grid h-screen place-items-center'>
           <Authenticator>
             {({ user }) => {
@@ -28,6 +28,7 @@ export default function Home() {
               return <></>
             }}
           </Authenticator>
+
         </div>
       }
     </>
