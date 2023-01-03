@@ -34,6 +34,27 @@
   --amplify-components-tabs-item-focus-color: var(--amplify-colors-white);
   --amplify-components-tabs-item-hover-color: var(--amplify-colors-orange); */
 }
+/*In App Buttons */
+.button {
+    background-color: var(--mint-primary);
+    color:  var(--amplify-colors-white);
+    font-weight: bold;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0.5rem 1rem #ddcece;
+}
+
+.button:hover
+ {
+    background-color: var(--mint-shaded);
+    color:  var(--amplify-colors-white);
+    box-shadow: 0 2rem 1rem slategray-100;
+    cursor: pointer;
+    animation-name: button-flare-shaded;
+    animation-duration: 0.35s;
+}
 
 [data-amplify-authenticator] [data-amplify-router] {
   border-color: var(--mint-shaded);

@@ -22,8 +22,8 @@ export class AppInfo {
     this.db = new DynamoDB.DocumentClient({
       region: 'us-east-2',
       credentials: {
-        accessKeyId: awskeys.AWS_ACCESS_KEY_ID,
-        secretAccessKey: awskeys.AWS_SECRET_ACCESS_KEY
+        accessKeyId: awskeys.tofer.AWS_ACCESS_KEY_ID,
+        secretAccessKey: awskeys.tofer.AWS_SECRET_ACCESS_KEY
       }
     })
     // db tables

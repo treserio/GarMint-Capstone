@@ -5,9 +5,8 @@ import Router from 'next/router'
 import AuthContext from '../contexts/authContext'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useContext } from 'react'
-
+import FirstTimeLoginInput from './first_time_login'
 import Test from './test'
-
 
 export default function Home() {
   const { user, setUser } = useContext(AuthContext)
@@ -19,10 +18,7 @@ export default function Home() {
 
   return (
     <>
-      {user ?
-        <Test>
-          <p>bullshit</p>
-        </Test>
+      {user ? user.preferred_username ?  <Test/>: <FirstTimeLoginInput />
       : <div className='grid h-screen place-items-center'>
           <Authenticator>
             {({ user }) => {
@@ -30,6 +26,7 @@ export default function Home() {
               return <></>
             }}
           </Authenticator>
+
         </div>
       }
     </>
