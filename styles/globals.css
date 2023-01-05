@@ -4,23 +4,26 @@
 @import '@aws-amplify/ui-react/styles.css';
 
 :root {
-  --mint-primary: hsl(158.1, 48.8%, 50%);
-  --mint-shaded: hsl(158.1, 59%, 39.2%);
+  --mint: hsl(158.1, 48.8%, 50%);
+  --mint-shaded: hsl(158.1, 59%, 35%);
   --mint-faded: hsl(158.1, 59%, 90%);
+  --sienna: hsl(16, 100%, 46%);
+  --sienna-faded: hsl(16, 100%, 90%);
+  --burntOrange: hsl(25, 100%, 40%);
   --amplify-components-fieldcontrol-color: var(--mint-shaded);
   --amplify-components-field-label-color: var(--mint-shaded);
   /* --amplify-components-button-hover-background-color: var(--mint-faded); */
   --amplify-components-button-hover-border-color: var(--mint-shaded);
-  /* --amplify-components-button-primary-border-color: var(--mint-primary); */
+  /* --amplify-components-button-primary-border-color: var(--mint); */
   --amplify-components-button-primary-focus-border-color: var(--mint-shaded);
 
   /* --amplify-components-tabs-item-hover-color: var(--amplify-colors-black); */
   --amplify-components-tabs-item-focus-color: var(--amplify-colors-white);
   --amplify-components-tabs-item-active-color: var(--amplify-colors-white);
   --amplify-components-tabs-item-active-border-color: var(--mint-faded);
-  --amplify-components-tabs-item-active-background-color: var(--mint-primary);
+  --amplify-components-tabs-item-active-background-color: var(--mint);
 
-  --amplify-components-tabs-item-color: var(--mint-primary);
+  --amplify-components-tabs-item-color: var(--mint);
   --amplify-components-authenticator-state-inactive-background-color: var(--mint-faded);
 
   /* --amplify-colors-background-primary: var(--amplify-colors-neutral-90);
@@ -36,7 +39,7 @@
 }
 /*In App Buttons */
 .button {
-    background-color: var(--mint-primary);
+    background-color: var(--mint);
     color:  var(--amplify-colors-white);
     font-weight: bold;
     border-radius: 0.5rem;
@@ -46,14 +49,17 @@
     /* box-shadow: 0 0.5rem 1rem #ddcece; */
 }
 
-.button:hover
- {
+.button:hover {
     background-color: var(--mint-shaded);
     color:  var(--amplify-colors-white);
-    box-shadow: 0 2rem 1rem slategray-100;
     cursor: pointer;
     animation-name: button-flare-shaded;
     animation-duration: 0.35s;
+    /* animation-direction: 'forward'; */
+}
+
+.button:active {
+  transform: translateY(2px);
 }
 
 [data-amplify-authenticator] [data-amplify-router] {
@@ -80,21 +86,16 @@
   font-weight: bold;
   cursor: 'pointer';
   transition: 'all 0.25s ease';
-  background-color: var(--mint-primary);
+  background-color: var(--mint);
 }
 
 .newButton:hover {
     background-color: var(--mint-shaded);
     color:  var(--amplify-colors-white);
-    box-shadow: 0 2rem 1rem slategray-100;
     cursor: pointer;
     animation-name: button-flare-shaded;
     animation-duration: 0.35s;
 }
-
-/* .newButton:active {
-  transform: translateY(2px)
-} */
 
 .newButton:after {
   content:"";
@@ -102,12 +103,13 @@
 
 .onclic {
   width: 40px;
-  border-color: var(--mint-primary);
+  border-color: var(--mint);
   border-width: 3px;
   font-size: 0;
-  border-left-color: var(--mint-primary);
+  border-left-color: var(--mint);
   animation: rotating 2s 0.25s linear infinite;
 }
+
 .onclic:after {
   content:"";
 }
@@ -121,7 +123,7 @@
 .validate {
   font-size:13px;
   color: white;
-  background: var(--mint-primary);
+  background: var(--mint);
 }
 
 .validate:after {
@@ -134,7 +136,7 @@
 
 .amplify-button[data-variation='primary'] {
 /* .amplify-button { */
-  background: var(--mint-primary);
+  background: var(--mint);
 }
 
 .amplify-button[data-variation='primary']:hover {
@@ -142,17 +144,17 @@
   animation-name: button-flare-shaded;
   animation-duration: 0.35s;
   /* animation-fill-mode: forwards; */
-  background: var(--mint-shaded);
+  background-color: var(--mint-shaded);
 }
 
 .federated-sign-in-button {
-  border-color: var(--mint-primary);
+  border-color: var(--mint);
 }
 
 .federated-sign-in-button:hover {
   animation-name: button-flare-faded;
   animation-duration: 0.35s;
-  background: var(--mint-faded);
+  background-color: var(--mint-faded);
 }
 
 .amplify-button--link {
@@ -190,7 +192,7 @@
 }
 
 .amplify-input {
-  border-color: var(--mint-primary);
+  border-color: var(--mint);
 }
 
 .amplify-input:focus {
@@ -205,7 +207,8 @@
 .amplify-input:hover {
   animation-name: button-flare-faded;
   animation-duration: 0.35s;
-  background: var(--mint-faded);
+  background-color: var(--mint-faded);
+  cursor: pointer;
 }
 
 .amplify-heading--3 {
@@ -536,29 +539,44 @@
     );
   }
   100% {
-    background: var(--mint-shaded);
+    background: var(--mint-faded);
   }
-}
-
-.loadingLeaf {
-  position: absolute;
-  top: 150px;
-  left: 150px;
-  width: 50px;
-  height: 82.6px;
-  /* animation: rotateLeaf infinite linear, */
-  animation: rotating 2s 0.25s linear infinite;
-}
-
-.loadingMan {
-  position: absolute;
-  top: 20px;
-  left: 100px;
-  width: 150px;
-  height: 100px;
 }
 
 @keyframes rotating {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ###### input check animations ###### */
+
+
+.confirmation input + div > label {
+  color: var(--amplify-colors-white);
+  background-color: var(--mint);
+  transition: all 0.35s ease;
+  cursor: pointer;
+  margin-bottom: 50px;
+}
+
+.confirmation input:checked + div > label {
+  color: var(--burntOrange);
+  background-color: var(--mint-faded);
+  padding-left: 30px;
+}
+
+.fadeInCheck {
+  transform: translateX(-10px);
+  color: var(--burntOrange);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+.confirmation input:checked + div > .fadeInCheck {
+  transform: translateX(25px);
+  opacity: 1;
+}
+
+/* .confirmation input + label:active {
+  transform: translateY(2px);
+} */
