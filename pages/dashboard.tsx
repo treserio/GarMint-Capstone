@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { useState } from "react"
 import GarmintCam from "../ui-components/GarmintCam"
 import { useRef } from 'react'
+=======
+import React, { useState } from "react";
+import CamApp from "../components/camApp";
+import GarmintSlider from "../ui-components/carousel";
+>>>>>>> working on carousel
 
 function Dashboard() {
   const [cameraOn, setIsCameraOpen] = useState(false);
