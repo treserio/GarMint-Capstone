@@ -551,7 +551,7 @@
 /* ###### input check animations ###### */
 
 
-.confirmation input + div > label {
+.garmintCheckbox input + div > label {
   color: var(--amplify-colors-white);
   background-color: var(--mint);
   transition: all 0.35s ease;
@@ -559,7 +559,7 @@
   margin-bottom: 50px;
 }
 
-.confirmation input:checked + div > label {
+.garmintCheckbox input:checked + div > label {
   color: var(--burntOrange);
   background-color: var(--mint-faded);
   padding-left: 30px;
@@ -572,11 +572,54 @@
   transition: all 0.35s ease;
 }
 
-.confirmation input:checked + div > .fadeInCheck {
+.garmintCheckbox input:checked + div > .fadeInCheck {
   transform: translateX(25px);
   opacity: 1;
 }
 
-/* .confirmation input + label:active {
-  transform: translateY(2px);
-} */
+#highTemp:hover {
+  pointer-events: all;
+}
+
+/* Removing the default appearance */
+.thumb,
+.thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.thumb {
+  pointer-events: none;
+  position: absolute;
+  height: 0;
+  width: 200px;
+  outline: none;
+}
+
+/* For Chrome browsers */
+.thumb::-webkit-slider-thumb {
+  background-color: #f1f5f7;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+}
+
+/* For Firefox browsers */
+.thumb::-moz-range-thumb {
+  background-color: #f1f5f7;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+}

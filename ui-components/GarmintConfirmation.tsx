@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import GarmintCheckbox from "./GarmintCheckbox"
+import TemperatureRange from './TemperatureRange'
 
 interface ImageInterface {
   src: string
@@ -52,7 +53,9 @@ export default function garmintConfirmation(
   const checkRed = useRef<HTMLInputElement>(null)
   const checkYellow = useRef<HTMLInputElement>(null)
   const checkWhite = useRef<HTMLInputElement>(null)
-  // const topClass = 'rounded-full button'
+  // temp
+  const [low, setLow] = useState(32)
+  const [high, setHigh] = useState(100)
 
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
@@ -73,13 +76,12 @@ export default function garmintConfirmation(
         predictions[index].height
       )
       // maybe switch case for colors
-      if (predictions[index].class == "0") checkTop.current!.checked = true
+      if (checkTop.current && predictions[index].class == "0") checkTop.current.checked = true
+      if (checkBottom.current && predictions[index].class == "1") checkBottom.current.checked = true
+      if (checkOuter.current && predictions[index].class == "2") checkOuter.current.checked = true
       // update state to rerender the canvas
       setLoadingCanvas(false)
     }
-    console.log('tops', checkTop.current)
-    console.log('bottoms', checkBottom.current?.checked)
-    console.log('outer', checkOuter.current?.checked)
   })
 
   const confirmGarmint = () => {
@@ -143,211 +145,37 @@ export default function garmintConfirmation(
       <p>This looks like a...</p>
       <hr style={styleDivider} />
       <div className='flex justify-between items-center mb-2' style={{width: image.width}} >
-        <input
-          type='checkbox'
-          id='top'
-          value='top'
-          ref={checkTop}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='top'
-            className='rounded-full px-3 py-1'
-          >
-            Top
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='bottom'
-          value='bottom'
-          ref={checkBottom}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='bottom'
-            className='rounded-full px-3 py-1'
-          >
-            Bottom
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='Outer'
-          value='Outer'
-          ref={checkOuter}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='Outer'
-            className='rounded-full px-3 py-1'
-          >
-            Outer Wear
-          </label>
-        </div>
+        <GarmintCheckbox ref={checkTop} label='Top' />
+        <GarmintCheckbox ref={checkBottom} label='Bottom' />
+        <GarmintCheckbox ref={checkOuter} label='Outer Wear' />
       </div>
       <p>It's colors are...</p>
       <hr style={styleDivider} />
       <div className='flex justify-between items-center mb-3' style={{width: image.width}} >
-        <input
-          type='checkbox'
-          id='black'
-          value='black'
-          ref={checkBlack}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='black'
-            className='rounded-full px-3 py-1'
-          >
-            Black
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='blue'
-          value='blue'
-          ref={checkBlue}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='blue'
-            className='rounded-full px-3 py-1'
-          >
-            Blue
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='brown'
-          value='brown'
-          ref={checkBrown}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='brown'
-            className='rounded-full px-3 py-1'
-          >
-            Brown
-          </label>
-        </div>
+        <GarmintCheckbox ref={checkBlack} label='Black' />
+        <GarmintCheckbox ref={checkBlue} label='Blue' />
+        <GarmintCheckbox ref={checkBrown} label='Brown' />
       </div>
       <div className='flex justify-between items-center mb-3' style={{width: image.width}} >
-        <input
-            type='checkbox'
-            id='green'
-            value='green'
-            ref={checkGreen}
-            hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='green'
-            className='rounded-full px-3 py-1'
-          >
-            Green
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='orange'
-          value='orange'
-          ref={checkOrange}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='orange'
-            className='rounded-full px-3 py-1'
-          >
-            Orange
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='purple'
-          value='purple'
-          ref={checkPurple}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='purple'
-            className='rounded-full px-3 py-1'
-          >
-            Purple
-          </label>
-        </div>
+        <GarmintCheckbox ref={checkGreen} label='Green' />
+        <GarmintCheckbox ref={checkOrange} label='Orange' />
+        <GarmintCheckbox ref={checkPurple} label='Purple' />
       </div>
       <div className='flex justify-between items-center mb-3' style={{width: image.width}} >
-        <input
-          type='checkbox'
-          id='red'
-          value='red'
-          ref={checkRed}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='red'
-            className='rounded-full px-3 py-1'
-          >
-            Red
-          </label>
-        </div>
-        <input
-          type='checkbox'
-          id='yellow'
-          value='yellow'
-          ref={checkYellow}
-          hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='yellow'
-            className='rounded-full px-3 py-1'
-          >
-            Yellow
-          </label>
-        </div>
-        <input
-            type='checkbox'
-            id='white'
-            value='white'
-            ref={checkWhite}
-            hidden={true}
-        />
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className='fadeInCheck -ml-4' />
-          <label
-            htmlFor='white'
-            className='rounded-full px-3 py-1'
-          >
-            White
-          </label>
-        </div>
+        <GarmintCheckbox ref={checkRed} label='Red' />
+        <GarmintCheckbox ref={checkYellow} label='Yellow' />
+        <GarmintCheckbox ref={checkWhite} label='White' />
       </div>
       <p>What temperatures can you wear it in?</p>
       <hr style={styleDivider} />
       <div className='flex justify-between items-center mb-3' style={{width: image.width}} >
-
+        <TemperatureRange
+          low={low}
+          setLow={setLow}
+          high={high}
+          setHigh={setHigh}
+          width={image.width}
+        />
       </div>
       <p>What style would you wear it with?</p>
       <hr style={styleDivider} />

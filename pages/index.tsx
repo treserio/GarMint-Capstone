@@ -8,19 +8,20 @@ import { Authenticator } from '@aws-amplify/ui-react'
 import { useContext, useState, useEffect } from 'react'
 import FirstTimeLoginInput from './first_time_login'
 import Test from './test'
+import Dashboard from './dashboard'
 
 export default function Home() {
   const { user, setUser } = useContext(AuthContext)
   const { appContext } = useContext(AppContext)
   const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
 
-  useEffect(() => {
-    appContext.getUserGarmints(setGarmintCount)
-  }, [user])
+  // useEffect(() => {
+  //   appContext.getUserGarmints(setGarmintCount)
+  // }, [user])
 
   return (
     <>
-      {user ? user.attributes.preferred_username ? <Test /> : <FirstTimeLoginInput />
+      {user ? user.attributes.preferred_username ? <Dashboard /> : <FirstTimeLoginInput />
       : <div className='grid h-screen place-items-center'>
           <Authenticator>
             {({ user }) => {
