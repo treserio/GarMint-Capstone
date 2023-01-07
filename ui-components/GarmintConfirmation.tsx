@@ -174,6 +174,8 @@ export default function garmintConfirmation(
           setLow={setLow}
           high={high}
           setHigh={setHigh}
+          min={32}
+          max={100}
           width={image.width}
         />
       </div>

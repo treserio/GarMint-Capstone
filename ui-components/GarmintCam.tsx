@@ -9,7 +9,7 @@ import AuthContext from "../contexts/authContext"
 import AppContext from '../contexts/appContext'
 // components
 import Garmint from '../models/garmint'
-import Loading from './loading'
+import Loading from './Loading'
 import GarmintConfirmation from './GarmintConfirmation'
 // fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

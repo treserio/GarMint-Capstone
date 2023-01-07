@@ -1,66 +1,140 @@
-import React, { forwardRef, useRef, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
+import React, { useEffect, useRef } from 'react'
+import NextImage from 'next/image'
 
-// forward the ref from parent to perform necessary actions with parent
-const TemperatureRange = ({ low, setLow, high, setHigh, width }:
-  { low: any, setLow: any, high: any, setHigh: any, width: any }) => {
+import blazingSun from '../public/assets/blazingSun.png'
+import cloudySun from '../public/assets/cloudySun.png'
+import blowingCloud from '../public/assets/blowingCloud.png'
+import snowflake from '../public/assets/snowflake.png'
 
-  const lowDisplay = useRef<HTMLElement>(null)
-  const highDisplay = useRef<HTMLElement>(null)
-  const range = 100 - 32
-  console.log(low, high)
+// low, setLow, high, setHigh are from useState of parent
+export default function TemperatureRange ({
+  low,
+  setLow,
+  high,
+  setHigh,
+  min,
+  max,
+  width
+} : {
+  low: any,
+  setLow: any,
+  high: any,
+  setHigh: any,
+  min: number,
+  max: number,
+  width: any
+}) {
+
+  const lowDisplay = useRef<HTMLOutputElement>(null)
+  const highDisplay = useRef<HTMLOutputElement>(null)
+
+  // max - min, should come from props
+  const range = max - min
+  // console.log(low, high)
+
+  useEffect(() => {
+    // preload image
+    const bs = <NextImage src= {blazingSun} alt='blazing sun' />
+    const cs = <NextImage src= {cloudySun} alt='cloudy sun' />
+    const bc = <NextImage src= {blowingCloud} alt='blowing cloud' />
+    const sn = <NextImage src= {snowflake} alt='snowflake' />
+
+    if (lowDisplay.current) {
+      const newShift = ((low - min) / range) * 100
+      lowDisplay.current.innerHTML! = low
+      lowDisplay.current.style.left = `calc(${newShift}% + (${6 - newShift * 0.3}px))`
+    }
+    if (highDisplay.current) {
+        const newShift = ((high - min) / range) * 100
+        highDisplay.current.innerHTML! = high
+        if (high === max) {
+          highDisplay.current.style.left = `calc(${newShift}% + (${1.5 - newShift * 0.3}px))`
+        } else {
+          highDisplay.current.style.left = `calc(${newShift}% + (${6 - newShift * 0.3}px))`
+        }
+    }
+  })
 
   const changeLow = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (lowDisplay.current) {
-      if (e.target.valueAsNumber < high) {
-        const newShift = ((e.target.valueAsNumber - 32) / range) * 100
-        lowDisplay.current.innerHTML! = e.target.value
-        lowDisplay.current.style.left = `calc(${newShift}% + (${ - newShift * 0.18}px))`
-        setLow(e.target.valueAsNumber)
+    const targetValue: number = e.target.valueAsNumber
+    // alter the icon based on the current value
+    if (targetValue < high) {
+      if (targetValue >= 83 && low < 83) e.target.style.setProperty('--lowUrl', 'url(/assets/blazingSun.png)')
+      if ((targetValue < 83 && low >= 83) || (targetValue >= 66 && low < 66)) e.target.style.setProperty('--lowUrl', 'url(/assets/cloudySun.png)')
+      if ((targetValue < 66 && low >= 66) || (targetValue >= 49 && low < 49)) e.target.style.setProperty('--lowUrl', 'url(/assets/blowingCloud.png)')
+      if (targetValue < 49 && low >= 49) e.target.style.setProperty('--lowUrl', 'url(/assets/snowflake.png)')
+      // set the display value
+      if (lowDisplay.current) {
+        setLow(targetValue)
       }
+    } else {
+      setLow(high - 1)
     }
   }
 
   const changeHigh = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (highDisplay.current) {
-      if (e.target.valueAsNumber > low) {
-        const newShift = ((e.target.valueAsNumber - 32) / range) * 100
-        highDisplay.current.innerHTML! = e.target.value
-        highDisplay.current.style.left = `calc(${newShift}% + (${ - newShift * 0.18}px))`
-        setHigh(e.target.valueAsNumber)
+    const targetValue: number = e.target.valueAsNumber
+    // alter the icon based on the current value
+      if (targetValue > low) {
+      if (targetValue >= 83 && high < 83) e.target.style.setProperty('--highUrl', 'url(/assets/blazingSun.png)')
+      if ((targetValue < 83 && high >= 83) || (targetValue >= 66 && high < 66)) e.target.style.setProperty('--highUrl', 'url(/assets/cloudySun.png)')
+      if ((targetValue < 66 && high >= 66) || (targetValue >= 49 && high < 49)) e.target.style.setProperty('--highUrl', 'url(/assets/blowingCloud.png)')
+      if (targetValue < 49 && high >= 49) e.target.style.setProperty('--highUrl', 'url(/assets/snowflake.png)')
+      // set the display value
+      if (highDisplay.current) {
+        setHigh(targetValue)
       }
+    } else {
+      setHigh(low + 1)
     }
+  }
+
+  const styleBar: React.CSSProperties = {
+    position: 'absolute',
+    height: '0px',
+    borderTop: 'var(--burntOrange) 2.5px solid',
+    width: width - 20,
+    marginLeft: '10px',
+  }
+
+  const midSize = (high - low) / 68
+  const midShift = (low - min) / range * 98
+  const styleMid: React.CSSProperties = {
+    position: 'absolute',
+    height: '0px',
+    borderTop: 'var(--mint) 1.5px solid',
+    borderBottom: 'var(--mint) 1.5px solid',
+    backgroundColor: 'var(--mint)',
+    width: (width - 20) * midSize - 3,
+    left: `calc(${midShift}% + (${10 - midShift * 0.18}px))`,
   }
 
   return (
     <div className='tempSetter w-full relative mt-2 mb-5'>
+      <div style={styleBar} />
+      <div style={styleMid} />
       <input
         id='lowTemp'
-        className='thumb'
-        // className='absolute appearance-none pointer-events-none bg-transparent thumb'
+        className='tempSlider'
         type='range'
         value={low}
-        min={32}
-        max={100}
+        min={min}
+        max={max}
         style={{width}}
         onChange={changeLow}
       />
-      <output className='absolute top-4' ref={lowDisplay}>{low}</output>
+      <output className='absolute top-2' ref={lowDisplay}>{low}</output>
       <input
-        // className='absolute appearance-none pointer-events-none bg-transparent thumb'
         id='highTemp'
-        className='thumb'
+        className='tempSlider'
         type='range'
         value={high}
-        min={32}
-        max={100}
+        min={min}
+        max={max}
         style={{width}}
         onChange={changeHigh}
       />
-      <output className='absolute top-4' ref={highDisplay}>{high}</output>
+      <output className='absolute top-2' ref={highDisplay}>{high}</output>
     </div>
   )
 }
-
-export default TemperatureRange

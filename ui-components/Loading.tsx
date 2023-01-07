@@ -22,10 +22,10 @@ export default function Loading({ width, height }: { width: number, height: numb
   const styleLeaf: React.CSSProperties = height > 125 ?
     {
       position: 'absolute',
-      top: '38%',
-      left: '39.75%',
-      width: '20%',
-      height: '33.05%',
+      top: '41.5%',
+      left: '42%',
+      width: '16%',
+      height: '26.25%',
       animation: 'rotating 2s 0.25s linear infinite',
     } : {
       position: 'absolute',
@@ -35,6 +35,15 @@ export default function Loading({ width, height }: { width: number, height: numb
       height: '49.5%',
       animation: 'rotating 2s 0.25s linear infinite',
     }
+    // slightly bigger, just in case for > 125
+    // {
+    //   position: 'absolute',
+    //   top: '38%',
+    //   left: '39.75%',
+    //   width: '20%',
+    //   height: '33.05%',
+    //   animation: 'rotating 2s 0.25s linear infinite',
+    // }
 
   return (
     <div style={styleLoading}>
