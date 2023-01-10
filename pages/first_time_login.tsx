@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import AuthContext from '../contexts/authContext'
-import CamApp from '../components/camApp.js';
+// import CamApp from '../components/camApp.js';
 import { Auth } from '@aws-amplify/auth';
 import { useState, useContext } from 'react';
+import Image from 'next/image';
+
 
 export default function FirstTimeLoginInput() {
 
@@ -46,10 +48,23 @@ export default function FirstTimeLoginInput() {
 
     }
 
+    const getAvatar = () => {
+        console.log('get avatar');
+    }
+
     return (
         <>
             <div className='grid text-white h-screen place-items-center bg-lime-800 dark:bg-slate-700'>
                 <p className="text-3xl font-bold text-center ">Welcome GarMint your AI powered outfit selector!</p>
+                <div>
+                    <p className="text-2xl font-bold text-center ">Please fill out the following information to get started</p>
+                </div>
+                <div>
+                    <p className='text-xl font-bold text-center'>Let`s start with an avatar for your profile</p>
+                    <div className='flex justify-center'>
+                        {/* <button className='bg-mint-primary rounded-full h-20 w-20' onClick={}><AuthContext.Consumer>{({ user }) => <Image src={user.attributes.picture} alt="avatar" className="rounded-full h-20 w-20" />}</AuthContext.Consumer></button> */}
+                    </div>
+                </div>
                 <form className="flex flex-col items-center justify-center ">
                     <div className="flex flex-col items-center justify-center">
                         <label className="text-l font-semibold">Add your User Name for your Profile</label>
@@ -66,6 +81,7 @@ export default function FirstTimeLoginInput() {
                             color='black'
                             required
                         />
+
                         {missingName && <p className="text-red-300 text-xs">Please enter a username</p>}
                         <label className="text-l font-semibold">How many days between laundry day</label>
                         <input
@@ -116,7 +132,7 @@ export default function FirstTimeLoginInput() {
                             color='black'
                         />
                     </div> */}
-                    <button className="button button:hover button:focus mt-2" onClick={handleSubmit}>Submit</button>
+                    <button className="button button:hover button:focus mt-2 shadow-md shadow-slate-200" onClick={handleSubmit}>Submit</button>
                 </form>
 
             </div>

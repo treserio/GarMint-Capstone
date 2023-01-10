@@ -14,6 +14,7 @@ import AppContext, { AppInfo } from '../contexts/appContext'
 
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import NavBar from '../ui-components/navBar'
 
 
 Amplify.configure({ ...config, ssr: true })
@@ -56,23 +57,8 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.7.2/css/all.css" /> */}
       </Head>
       {user && (
-      <nav className='bg-red-300 absolute top-0 w-screen'>
-        <Link href="/">
-          <span className='bg-green-300'>Home</span>
-        </Link>
-        <Link href="/protected">
-          <span className='bg-orange-300'>Protected</span>
-        </Link>
-        <Link href="/protected-client-route">
-          <span className=''>Protected client route</span>
-        </Link>
-        <button onClick={async () => {
-          await Auth.signOut()
-          setUser(null)
-          setAppContext(new AppInfo())
-          router.push('/')
-        }}>Sign out</button>
-      </nav>)}
+        <NavBar />
+        )}
       <AuthContext.Provider value={{user, setUser}}>
         <AppContext.Provider value={{appContext, setAppContext}}>
           <Component {...pageProps} />

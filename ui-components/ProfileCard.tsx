@@ -3,22 +3,34 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
-
+import  AuthContext  from '../contexts/authContext'
+import AppContext from '../contexts/appContext'
+import { useContext, useState, useEffect } from 'react'
+import authContext from '../contexts/authContext'
 // need to pull user data from database for avatar and username
 // look into conecting calendar to google calendar
 
+
 function ProfileCard() {
+    const { user } = useContext(AuthContext)
+    const { appContext } = useContext(AppContext)
+    const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
+
+    useEffect(() => {
+        appContext.getUserGarmints(setGarmintCount)
+    }, [appContext])
+
     return (
         <>
-            <div className="flex items-center h-screen w-full justify-center">
+            <div className="flex h-screen w-full ">
 
-                <div className="max-w-xs">
+                <div className="">
                     <div className="bg-white shadow-xl rounded-lg py-3">
                         <div className="photo-wrapper p-2">
-                            <Image className="w-32 h-32 rounded-full mx-auto" src="https://esoteric918.github.io/static/media/me.ad0e663ab8f3044ba25d.jpg" alt="Tofer"></Image>
+                            <Image className="w-32 h-32 rounded-full mx-auto" src={"/assets/profile_HST.jpg"} alt="Tofer" width={10} height={10}></Image>
                         </div>
                         <div className="p-2">
-                            <h3 className="text-center text-xl text-gray-900 font-medium leading-8">USER NAME</h3>
+                            <h3 className="text-center text-xl text-gray-900 font-medium leading-8"> preferred user?? </h3>
                             <div className="text-center text-gray-400 text-xs font-semibold">
 
                             </div>
@@ -29,14 +41,13 @@ function ProfileCard() {
                                         <td className="px-2 py-2"><FontAwesomeIcon icon={faCalendarDays} className='ml-10 text-sm text-gray' /></td>
                                     </Link>
                                 </tr>
-                                    <tr>
-                                        <td className="px-2 py-2 text-gray-500 font-semibold">Settings</td>
-                                        <td className="px-2 py-2"><FontAwesomeIcon icon={faGear} className='ml-10 text-sm text-gray' /></td>
-                                    </tr>
                                 </tbody></table>
 
                             <div className="text-center my-3">
-                                <Link className="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium" href="#">View GarMints</Link>
+                                <p className="text-xs font-medium" >
+                                    GarMint Count
+                                    { garmintCount}
+                                </p>
                             </div>
 
                         </div>
