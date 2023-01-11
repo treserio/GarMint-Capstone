@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faRightFromBracket, faCalendarDays, faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faRightFromBracket,  faBars, faShirt, faPeopleRobbery } from '@fortawesome/free-solid-svg-icons';
 import ProfileCard from './ProfileCard';
 import { Auth } from '@aws-amplify/auth'
 import AppContext, { AppInfo } from '../contexts/appContext'
@@ -57,15 +57,16 @@ const Navbar = () => {
 	return (
 
 		<div className="w-full h-32 shadow-xl shadow-green-400 " id="Navbar">
-			<div className="flex justify-between  items-center w-full h-full px-3 2xl:px-16" >
+			<div className="flex justify-between w-full h-full px-3 2xl:px-16" >
 				<div className=''>
-					<Image src={'/assets/profile_HST.jpg'} alt="Tofer" width={40} height={40} className='rounded-full' />
-					<p>{user.attributes.preferred_username}</p>
-
+					<Image src={'/assets/profile_HST.jpg'} alt="Tofer" width={75} height={75} className='rounded-full mt-5' />
 				</div>
-				<div>
-					Tops Count {seasonTops.length}
-					Bottoms Count {seasonBottoms.length}
+				<div className='flex justify-start'>
+					<p className='capitalize font-bold'>{user.attributes.preferred_username}</p>
+					<FontAwesomeIcon icon={faShirt} className=' text-green-400' />{seasonTops.length}
+
+					<FontAwesomeIcon icon={faPeopleRobbery} className=' text-green-400' />{seasonBottoms.length}
+
 
 					<p>Wash Percent {washPercent}</p>
 

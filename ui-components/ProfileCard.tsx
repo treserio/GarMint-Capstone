@@ -30,7 +30,9 @@ function ProfileCard() {
                             <Image className="w-32 h-32 rounded-full mx-auto" src={"/assets/profile_HST.jpg"} alt="Tofer" width={10} height={10}></Image>
                         </div>
                         <div className="p-2">
-                            <h3 className="text-center text-xl text-gray-900 font-medium leading-8"> <p>{user.attributes.preferred_username}</p>  </h3>
+                            <h3 className="text-center text-xl text-gray-900 font-medium leading-8">
+                                <p className='capitalize font-bold'>{user.attributes.preferred_username}</p>
+                            </h3>
                             <div className="text-center text-gray-400 text-xs font-semibold">
 
                             </div>
