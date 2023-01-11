@@ -1,21 +1,27 @@
-import React, { useState } from "react";
-import CamApp from "../components/camApp";
+import React, { useState } from "react"
+import GarmintCam from "../ui-components/GarmintCam"
+import { useRef } from 'react'
 
 function Dashboard() {
-const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [cameraOn, setIsCameraOpen] = useState(false);
+  const toggleCam = () => setIsCameraOpen(!cameraOn);
 
-const toggleCam = () => setIsCameraOpen(!isCameraOpen);
+  const stuff = useRef(null)
 
-
-return (
-    <div className="flex flex-col items-center justify-center ">
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      {!cameraOn && <>
         <h2 className="text-center font-semibold">Now lets get your closet set up for the AI</h2>
-        <button  className="button button:hover button:focus mt-2"
-
-            onClick={() => toggleCam() }>Scan Items</button>
-
+        <button
+          className="button button:hover mt-2"
+          onClick={() => toggleCam()}
+        >
+          Scan Items
+        </button>
+      </>}
+      {cameraOn && <GarmintCam toggleCam={toggleCam} />}
     </div>
- )
+  )
 }
 
 export default Dashboard;

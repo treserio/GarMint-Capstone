@@ -1,26 +1,52 @@
 import React, { useState, useRef, useCallback, useContext } from "react"
-import roboflowAccess from '../certificates/roboflowKey.json'
+import axios from 'axios'
+// import Image from "next/image"
 import Webcam from "react-webcam"
-import Image from "next/image"
+// authentication
+import roboflowAccess from '../certificates/roboflowKey.json'
+// context
 import AuthContext from "../contexts/authContext"
 import AppContext from '../contexts/appContext'
+// components
 import Garmint from '../models/garmint'
-import axios from 'axios'
-import Loading from './loading'
+import Loading from './Loading'
+import GarmintConfirmation from './GarmintConfirmation'
+// fonts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
+interface ImageInterface {
+  src: string
+  width: number
+  height: number
+}
+
+interface Predictions {
+  class: string
+  confidence: number
+  height: number
+  width: number
+  x: number
+  y: number
+}
 
 export default function GarmintCam(props: any) {
   const { user } = useContext(AuthContext)
   const { appContext, setAppContext } = useContext(AppContext)
   // image and cam references for getting current video/images
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  // const [imageSrc, setImageSrc] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
   // states for controlling camera display
   const [webcamLoading, setWebcamLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
   const [imgError, setImgError] = useState(false)
+  const [image, setImage] = useState<ImageInterface>({
+    src: '',
+    width: 0,
+    height: 0
+  })
+  const [predictions, setPredictions] = useState<Array<Predictions>>([])
+
 
   const handleUserMedia = () => {
     setWebcamLoading(false)
@@ -29,19 +55,16 @@ export default function GarmintCam(props: any) {
   const closeCam = () => {
     props.toggleCam()
     setWebcamLoading(true)
+    setPredictions([])
   }
 
   const capture = async () => {
-    if (webcamRef && webcamRef.current) {
+    if (webcamRef && webcamRef.current != null) {
       setProcessing(true)
-      // console.log(webcamRef)
       // console.log(webcamRef.current.getScreenshot())
       const imageData = webcamRef.current.getScreenshot()
-
-      console.log('capture Username', user.username)
-      console.log('capture Count', appContext.garmintCount)
       // no conversion necessary
-      const res = await axios({
+      axios({
         method: "POST",
         url: "https://detect.roboflow.com/garmint-kbl0z/1",
         params: {
@@ -54,10 +77,16 @@ export default function GarmintCam(props: any) {
       })
       .then((res) => {
         console.log('axios res', res)
-        if (res.data.predictions.length) {
+        if (res.data.predictions.length && imageData) {
           /* ######### Move Everything Into A Confirmation Component ############# */
           // set another state variable here to display it with everything we've found, maybe create initial Garmint to pass to Confirmation
-
+          setImage({
+            src: imageData,
+            width: res.data.image.width,
+            height: res.data.image.height
+          })
+          // this causes the confirmation component to render
+          setPredictions(res.data.predictions)
           // x, y values on predictions are center points for the height / width that was found.
           // take 1/2 of width from x coordinate to get starting x point for image, add width to find entire width of image
           // take 1/2 of height from y coordinate to get starting y point for image, add hieght to find entire height of image
@@ -84,13 +113,12 @@ export default function GarmintCam(props: any) {
             ]
             ui temp slider for clothing temperature range, dased on device temp setting
           */
-          setImageSrc(imageData)
+
           const params = {
             TableName: 'garmints',
             Item,
           }
 
-          console.log(params)
           // appContext.db.put(params, (err: any, data: any) => {
           //   console.log('db Add:', appContext)
           //   if (err) throw err
@@ -119,15 +147,12 @@ export default function GarmintCam(props: any) {
     }
   }
 
-  const styleCamApp: React.CSSProperties = {
+  const styleGarmintCam: React.CSSProperties = {
     position: 'absolute',
     alignSelf: 'center',
-    // padding: '10px',
-    // top: '2vh',
-    // left: '2vw',
     boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
-    // border: 'solid 1px var(--mint-primary)',
+    backgroundColor: 'var(--amplify-colors-white)',
   }
 
   const styleSendButton: React.CSSProperties = {
@@ -143,49 +168,50 @@ export default function GarmintCam(props: any) {
     right: 10,
     top: 10,
     zIndex: 1,
-    color: 'var(--mint-primary)'
+    color: 'var(--mint)'
   }
-
-  // {imageSrc && (
-  //   <Image
-  //     alt="Photo"
-  //     src={imageSrc}
-  //     width={350}
-  //     height={350}
-  //   />
-  // )}
-
+  // possibly map the length of predictions and create one confirm for each, z-index = length - index so
+  // first one is layed over 2nd, and so on, swap predictions from array to individual
   return (
-    <div style={styleCamApp}>
-      <div style={{position: 'relative'}}>
-        <FontAwesomeIcon icon={faWindowClose} style={styleCloseButton} onClick={closeCam}/>
-        {(webcamLoading || processing) && <Loading />}
-        <Webcam
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          videoConstraints={{
-            width: 350,
-            height: 350,
-          }}
-          onUserMedia={handleUserMedia}
-          mirrored={true}
-          hidden={webcamLoading || processing}
-          style={{
-            borderTopLeftRadius: '0.5rem',
-            borderTopRightRadius: '0.5rem',
-          }}
-        />
-        <button
-          className="newButton button:hover"
-          style={styleSendButton}
-          onClick={webcamLoading || processing ? () => {} : capture}
-        >
-          {webcamLoading ? 'Accessing Camera'
-          : processing ? 'Processing Photo'
-            : imgError ? 'Garmint Undetected, click to retry'
-              : 'Send Garmint'}
-        </button>
-      </div>
-    </div>
+    <>{predictions.length ?
+      <GarmintConfirmation
+        image={image}
+        predictions={predictions}
+        camState={{setPredictions, setProcessing, setWebcamLoading, setImgError}}
+        index={0}
+      />
+    : <div style={styleGarmintCam}>
+        <div style={{position: 'relative'}}>
+          <FontAwesomeIcon icon={faWindowClose} style={styleCloseButton} onClick={closeCam}/>
+          {webcamLoading && <Loading width={350} height={350} />}
+          {processing && <Loading width={webcamRef.current!.canvas.width} height={webcamRef.current!.canvas.height} />}
+          <Webcam
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={{
+              width: 350,
+              height: 350,
+            }}
+            onUserMedia={handleUserMedia}
+            mirrored={true}
+            hidden={webcamLoading || processing}
+            style={{
+              borderTopLeftRadius: '0.5rem',
+              borderTopRightRadius: '0.5rem',
+            }}
+          />
+          <button
+            className="newButton button:hover"
+            style={styleSendButton}
+            onClick={webcamLoading || processing ? () => {} : capture}
+          >
+            {webcamLoading ? 'Accessing Camera'
+            : processing ? 'Processing Photo'
+              : imgError ? 'Garmint Undetected, click to retry'
+                : 'Send Garmint'}
+          </button>
+        </div>
+      </div>}
+    </>
   );
 };
