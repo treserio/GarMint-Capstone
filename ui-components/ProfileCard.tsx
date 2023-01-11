@@ -13,11 +13,12 @@ import { useContext, useState, useEffect } from 'react'
 function ProfileCard() {
     const { user } = useContext(AuthContext)
     const { appContext } = useContext(AppContext)
-    const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
+    // const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
 
-    useEffect(() => {
-        appContext.getUserGarmints(setGarmintCount)
-    }, [appContext])
+    // useEffect(() => {
+    //     appContext.getUserGarmints(setGarmintCount)
+    // }, [appContext])
+    console.log(appContext.garmintCount, 'whats the number')
 
     return (
         <>
@@ -33,19 +34,21 @@ function ProfileCard() {
                             <div className="text-center text-gray-400 text-xs font-semibold">
 
                             </div>
-                            <table className="text-xs my-3">
-                                <tbody><tr>
-                                    <td className="px-2 py-2 text-gray-500 font-semibold">Calendar</td>
-                                    <Link href="/">
-                                        <td className="px-2 py-2"><FontAwesomeIcon icon={faCalendarDays} className='ml-10 text-sm text-gray' /></td>
-                                    </Link>
-                                </tr>
-                                </tbody></table>
+                            <div className="text-xs my-3">
+                                <div>
+
+                                    <div className=" text-gray-500 font-semibold">Calendar
+                                        <Link href="/">
+                                            <FontAwesomeIcon icon={faCalendarDays} className='px-3 text-sm text-gray' />
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="text-center my-3">
                                 <p className="text-xs font-medium justify-evenly" >
                                     GarMint Count:
-                                    {garmintCount}
+                                    {appContext.garmintCount}
                                 </p>
                             </div>
 

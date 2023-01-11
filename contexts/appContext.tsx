@@ -59,6 +59,7 @@ export class AppInfo {
       // run query and use data in callback
       // console.log('\nRunningQuery\n')
       this.db.query(params, (err, data) => {
+				console.log('data test for count:', data)
         if (data?.Count != 0) {
           this.tops = data!.Items!.filter((item: any) => item.type == 'top')
             .map((item) => Garmint.fromJson(item))
@@ -73,6 +74,7 @@ export class AppInfo {
         console.log('garmintCount', this.garmintCount)
         if (err) {
           console.log('getUserGarmints Error:', err)
+					// setGarmintCount(0)
           this.garmintCount = 0
         }
       })
