@@ -55,6 +55,7 @@ export default function GarmintCam(props: any) {
   const closeCam = () => {
     props.toggleCam()
     setWebcamLoading(true)
+    setPredictions([])
   }
 
   const capture = async () => {
@@ -63,7 +64,7 @@ export default function GarmintCam(props: any) {
       // console.log(webcamRef.current.getScreenshot())
       const imageData = webcamRef.current.getScreenshot()
       // no conversion necessary
-      const res = await axios({
+      axios({
         method: "POST",
         url: "https://detect.roboflow.com/garmint-kbl0z/1",
         params: {
@@ -84,6 +85,7 @@ export default function GarmintCam(props: any) {
             width: res.data.image.width,
             height: res.data.image.height
           })
+          // this causes the confirmation component to render
           setPredictions(res.data.predictions)
           // x, y values on predictions are center points for the height / width that was found.
           // take 1/2 of width from x coordinate to get starting x point for image, add width to find entire width of image
@@ -175,7 +177,7 @@ export default function GarmintCam(props: any) {
       <GarmintConfirmation
         image={image}
         predictions={predictions}
-        camState={{setPredictions, setProcessing, setWebcamLoading}}
+        camState={{setPredictions, setProcessing, setWebcamLoading, setImgError}}
         index={0}
       />
     : <div style={styleGarmintCam}>

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import NextImage from 'next/image'
 
-import blazingSun from '../public/assets/blazingSun.png'
-import cloudySun from '../public/assets/cloudySun.png'
-import blowingCloud from '../public/assets/blowingCloud.png'
-import snowflake from '../public/assets/snowflake.png'
+import blazingSun from '../public/assets/icons/sm-blazingSun.png'
+import cloudySun from '../public/assets/icons/sm-cloudySun.png'
+import blowingCloud from '../public/assets/icons/sm-blowingCloud.png'
+import snowflake from '../public/assets/icons/sm-snowflake.png'
 
 // low, setLow, high, setHigh are from useState of parent
 export default function TemperatureRange ({
@@ -59,10 +59,10 @@ export default function TemperatureRange ({
     const targetValue: number = e.target.valueAsNumber
     // alter the icon based on the current value
     if (targetValue < high) {
-      if (targetValue >= 83 && low < 83) e.target.style.setProperty('--lowUrl', 'url(/assets/blazingSun.png)')
-      if ((targetValue < 83 && low >= 83) || (targetValue >= 66 && low < 66)) e.target.style.setProperty('--lowUrl', 'url(/assets/cloudySun.png)')
-      if ((targetValue < 66 && low >= 66) || (targetValue >= 49 && low < 49)) e.target.style.setProperty('--lowUrl', 'url(/assets/blowingCloud.png)')
-      if (targetValue < 49 && low >= 49) e.target.style.setProperty('--lowUrl', 'url(/assets/snowflake.png)')
+      if (targetValue >= 83 && low < 83) e.target.style.setProperty('--lowUrl', 'url(/assets/icons/sm-blazingSun.png)')
+      if ((targetValue < 83 && low >= 83) || (targetValue >= 66 && low < 66)) e.target.style.setProperty('--lowUrl', 'url(/assets/icons/sm-cloudySun.png)')
+      if ((targetValue < 66 && low >= 66) || (targetValue >= 49 && low < 49)) e.target.style.setProperty('--lowUrl', 'url(/assets/icons/sm-blowingCloud.png)')
+      if (targetValue < 49 && low >= 49) e.target.style.setProperty('--lowUrl', 'url(/assets/icons/sm-snowflake.png)')
       // set the display value
       if (lowDisplay.current) {
         setLow(targetValue)
@@ -76,10 +76,10 @@ export default function TemperatureRange ({
     const targetValue: number = e.target.valueAsNumber
     // alter the icon based on the current value
       if (targetValue > low) {
-      if (targetValue >= 83 && high < 83) e.target.style.setProperty('--highUrl', 'url(/assets/blazingSun.png)')
-      if ((targetValue < 83 && high >= 83) || (targetValue >= 66 && high < 66)) e.target.style.setProperty('--highUrl', 'url(/assets/cloudySun.png)')
-      if ((targetValue < 66 && high >= 66) || (targetValue >= 49 && high < 49)) e.target.style.setProperty('--highUrl', 'url(/assets/blowingCloud.png)')
-      if (targetValue < 49 && high >= 49) e.target.style.setProperty('--highUrl', 'url(/assets/snowflake.png)')
+      if (targetValue >= 83 && high < 83) e.target.style.setProperty('--highUrl', 'url(/assets/icons/sm-blazingSun.png)')
+      if ((targetValue < 83 && high >= 83) || (targetValue >= 66 && high < 66)) e.target.style.setProperty('--highUrl', 'url(/assets/icons/sm-cloudySun.png)')
+      if ((targetValue < 66 && high >= 66) || (targetValue >= 49 && high < 49)) e.target.style.setProperty('--highUrl', 'url(/assets/icons/sm-blowingCloud.png)')
+      if (targetValue < 49 && high >= 49) e.target.style.setProperty('--highUrl', 'url(/assets/icons/sm-snowflake.png)')
       // set the display value
       if (highDisplay.current) {
         setHigh(targetValue)

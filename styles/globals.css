@@ -37,8 +37,8 @@
   --amplify-components-tabs-item-focus-color: var(--amplify-colors-white);
   --amplify-components-tabs-item-hover-color: var(--amplify-colors-orange); */
 
-  --highUrl: url(/assets/blazingSun.png);
-  --lowUrl: url(/assets/snowflake.png);
+  --highUrl: url(/assets/icons/sm-blazingSun.png);
+  --lowUrl: url(/assets/icons/sm-snowflake.png);
 }
 /*In App Buttons */
 .button {
