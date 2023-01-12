@@ -16,11 +16,11 @@ function FilterDrawer() {
                 <div className={
                     isDrawerOpen
                     ? "hidden"
-                    : "text-center bottom-0 left-0 right-0 transform-none"
+                    : "text-center bottom-0 left-0 right-0 transform-none absolute"
                     }>
                 <button
                     onClick={toggleDrawer}
-                    className="text-white z-40 w-full bg-gray-200 hover:bg-gray-400 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-[var(--mint-faded)] dark:hover:bg[var(--mint-primary)] focus:outline-none " type="button" data-drawer-target="drawer-bottom-example" data-drawer-show="drawer-bottom-example" data-drawer-placement="bottom" aria-controls="drawer-bottom-example">
+                    className="text-white z-40 w-full bg-gray-200 hover:bg-gray-400 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-md dark:bg-[var(--mint-faded)] dark:hover:bg[var(--mint-primary)] focus:outline-none " type="button" data-drawer-target="drawer-bottom-example" data-drawer-show="drawer-bottom-example" data-drawer-placement="bottom" aria-controls="drawer-bottom-example">
                     <FontAwesomeIcon icon={faBars} />
                 </button>
             </div>
