@@ -22,7 +22,6 @@ const Navbar = () => {
 	let dirtyBottoms = []
 	let washPercent = 0
 
-
 	const router = useRouter()
 
 	useEffect(() => {
@@ -53,25 +52,24 @@ const Navbar = () => {
 		setNav(!nav);
 	}
 
-
 	return (
 
-		<div className="w-full h-32 shadow-xl shadow-green-400 " id="Navbar">
-			<div className="flex justify-between w-full h-full px-3 2xl:px-16" >
-				<div className=''>
-					<Image src={'/assets/profile_HST.jpg'} alt="Tofer" width={75} height={75} className='rounded-full mt-5' />
+		<div className="w-full h-32 shadow-xl shadow-green-400 dark:shadow-xl dark:shadow-green-300 bg-lime-800 dark:bg-slate-700" id="Navbar">
+			<div className="flex w-full h-full px-3 2xl:px-16" >
+				<div className='item-center pr-3'>
+					<Image src={'/assets/profile_HST.jpg'} alt="Tofer" width={75} height={65} className='rounded-full mt-5' />
 				</div>
-				<div className='flex justify-start'>
-					<p className='capitalize font-bold'>{user.attributes.preferred_username}</p>
-					<FontAwesomeIcon icon={faShirt} className=' text-green-400' />{seasonTops.length}
-
-					<FontAwesomeIcon icon={faPeopleRobbery} className=' text-green-400' />{seasonBottoms.length}
+				<div className='flex flex-col w-full  text-white'>
+					<p className='capitalize font-bold mt-4 mb-2'>{user.attributes.preferred_username}</p>
+					<FontAwesomeIcon icon={faShirt} className='text-lg text-green-400' />{seasonTops.length}
+                    {seasonBottoms.length}
+					<FontAwesomeIcon icon={faPeopleRobbery} className='text-lg text-green-400' />
 
 
 					<p>Wash Percent {washPercent}</p>
 
 				</div>
-				<div className='hidden md:flex sm:justify-end'>
+				<div className='hidden md:flex sm:justify-end  text-white'>
 
 					<button onClick={async () => {
 						await Auth.signOut()
