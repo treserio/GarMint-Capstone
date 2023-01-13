@@ -39,6 +39,7 @@
 
   --highUrl: url(/assets/icons/sm-blazingSun.png);
   --lowUrl: url(/assets/icons/sm-snowflake.png);
+  --trackImgX: 50%
 }
 /*In App Buttons */
 .button {
@@ -665,13 +666,17 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-100%, -50%);
-    background-color: blueviolet;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
 }
 
-.card_image {
-    width: 40vmin;
-    height: 56vmin;
-    object-fit: cover;
-    object-position: center;
+.slide-controller {
+  height: 350px;
+}
+
+#card_track img {
+  width: 40vmin;
+  height: 350px;
+  object-fit: cover;
+  object-position: var(--trackImgX) 50%;
 }
