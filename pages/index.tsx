@@ -15,9 +15,15 @@ export default function Home() {
   const { appContext } = useContext(AppContext)
   const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
 
-  // useEffect(() => {
-  //   appContext.getUserGarmints(setGarmintCount)
-  // }, [user])
+  useEffect(() => {
+    console.log('running index effect')
+    if (!appContext.weather) {
+      appContext.getWeather()
+    }
+    if (!appContext.garmintCount) {
+      appContext.getUserGarmints(setGarmintCount)
+    }
+  }, [user])
 
   return (
     <>
