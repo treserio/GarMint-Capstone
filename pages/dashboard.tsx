@@ -31,14 +31,16 @@ function Dashboard() {
 
       card_track.current.dataset.percentage = nextPercentage + ''
       card_track.current.style.transform = `translate(${nextPercentage}%, -50%)`
-
-      for (const child of Object.values(card_track.current.children as HTMLCollectionOf<HTMLElement>)) {
-        const reform = child.children as HTMLCollectionOf<HTMLImageElement>
-        const grandChild = reform[0]
-        // i wonder if I can just set the global variable, although local variables would look better
-        // as they come into the view, but we don't have a predefined number here so...maybe too much
-        grandChild.style.setProperty('--trackImgX', `${Math.round(nextPercentage + 100)}%`)
-      }
+      card_track.current.style.setProperty('--trackImgX', `${Math.round(nextPercentage + 100)}%`)
+      // setting styles on all the images, if they're all keyed off the same one can use above
+      // ultimately I'd prefer that the images scroll as they cross the page...
+      // for (const child of Object.values(card_track.current.children as HTMLCollectionOf<HTMLElement>)) {
+      //   const reform = child.children as HTMLCollectionOf<HTMLImageElement>
+      //   const grandChild = reform[0]
+      //   // i wonder if I can just set the global variable, although local variables would look better
+      //   // as they come into the view, but we don't have a predefined number here so...maybe too much
+      //   grandChild.style.setProperty('--trackImgX', `${Math.round(nextPercentage + 100)}%`)
+      // }
     }
   }
 
@@ -63,7 +65,7 @@ return (
       Scan Items
     </button>
     <div
-      className="slide-controller w-screen bg-gray-600 relative"
+      className="slide-controller w-screen bg-gray-600 relative overflow-hidden"
       onMouseDown={e => handleMouseDown(e)}
       onMouseMove={e => handleMouseMove(e)}
       onMouseUp={e => handleMouseUp(e)}
@@ -75,7 +77,7 @@ return (
         // hmu={handleMouseUp}
       />
     </div>
-
+    {isCameraOpen && <GarmintCam toggleCam={toggleCam} />}
   </div>
  )
 }
