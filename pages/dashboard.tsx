@@ -1,5 +1,6 @@
 import GarmintCam from "../ui-components/GarmintCam"
 import GarmintSlider from "../ui-components/carousel";
+import FilterDrawer from "../ui-components/filterDrawer";
 import React, { useState, useRef } from "react";
 
 
@@ -77,6 +78,7 @@ return (
         // hmu={handleMouseUp}
       />
     </div>
+    <FilterDrawer />
     {isCameraOpen && <GarmintCam toggleCam={toggleCam} />}
   </div>
  )
