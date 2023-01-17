@@ -1,12 +1,10 @@
-import GarmintCam from "../ui-components/GarmintCam"
 import GarmintSlider from "../ui-components/carousel";
 import FilterDrawer from "../ui-components/filterDrawer";
 import React, { useState, useRef } from "react";
 
 
 function Dashboard() {
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const toggleCam = () => setIsCameraOpen(!isCameraOpen);
+
 
   const card_track = useRef<HTMLDivElement>(null)
 
@@ -55,16 +53,6 @@ function Dashboard() {
 
 return (
   <div className="flex flex-col items-center justify-center ">
-    <h2 className="text-center font-semibold">Now lets get your closet set up for the AI</h2>
-    <button
-      className="
-        button
-        mt-2
-      "
-      onClick={() => toggleCam() }
-    >
-      Scan Items
-    </button>
     <div
       className="slide-controller w-screen bg-gray-600 relative overflow-hidden"
       onMouseDown={e => handleMouseDown(e)}
@@ -79,7 +67,6 @@ return (
       />
     </div>
     <FilterDrawer />
-    {isCameraOpen && <GarmintCam toggleCam={toggleCam} />}
   </div>
  )
 }

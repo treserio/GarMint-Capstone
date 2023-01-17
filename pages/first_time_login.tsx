@@ -4,6 +4,8 @@ import AuthContext from '../contexts/authContext'
 import { Auth } from '@aws-amplify/auth';
 import { useState, useContext } from 'react';
 import Image from 'next/image';
+import { DotGothic16 } from '@next/font/google';
+import { setRevalidateHeaders } from 'next/dist/server/send-payload';
 
 
 export default function FirstTimeLoginInput() {
@@ -32,20 +34,26 @@ export default function FirstTimeLoginInput() {
             setMissingName(true);
             return console.log('missing name');
         } else {
-        try {
-            Auth.updateUserAttributes(user, {
-                'preferred_username': preferred_username,
-                'custom:wash_cycle': wash_cycle,
-                'custom:use_limit': use_limit,
-                // 'custom:wash_notification': wash_notification
-            })
-            router.push('/dashboard');
-        } catch (err) {
-            console.log('updated user attributes', err);
-            alert('Error updating user');
+            try {
+                Auth.updateUserAttributes(user, {
+                    'preferred_username': preferred_username,
+                    'custom:wash_cycle': wash_cycle,
+                    'custom:use_limit': use_limit,
+                    // 'custom:wash_notification': wash_notification
+                })
+                router.push('/dashboard');
+            } catch (err) {
+                console.log('updated user attributes', err);
+                alert('Error updating user');
             }
         }
 
+    }
+
+    const setAvatar = () => {
+        const avatar = 'dog';
+        const avatarUrl = `assets/avatars/${avatar}.png`;
+        console.log('set avatar');
     }
 
     const getAvatar = () => {
@@ -54,15 +62,80 @@ export default function FirstTimeLoginInput() {
 
     return (
         <>
-            <div className='grid text-white h-screen place-items-center bg-lime-800 dark:bg-slate-700'>
+            <div className='grid text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-auto place-items-center shadow-2xl shadow-[var(--mint)] dark:bg-slate-700'>
                 <p className="text-3xl font-bold text-center ">Welcome GarMint your AI powered outfit selector!</p>
                 <div>
                     <p className="text-2xl font-bold text-center ">Please fill out the following information to get started</p>
                 </div>
                 <div>
                     <p className='text-xl font-bold text-center'>Let`s start with an avatar for your profile</p>
-                    <div className='flex justify-center'>
-                        {/* <button className='bg-mint-primary rounded-full h-20 w-20' onClick={}><AuthContext.Consumer>{({ user }) => <Image src={user.attributes.picture} alt="avatar" className="rounded-full h-20 w-20" />}</AuthContext.Consumer></button> */}
+                    <div className='flex justify-center gap-5'>
+
+
+                        <Image
+                            src='/assets/avatars/dog.png'
+                            alt="avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full cursor-pointer"
+                            onClick={
+                                () => {
+                                    setAvatar();
+                                }
+                            }
+                        />
+
+                        <Image
+                            src='/assets/avatars/pig.png'
+                            alt="avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full cursor-pointer "
+                            onClick={
+                                () => {
+                                    setAvatar();
+                                }
+                            }
+                        />
+
+                        <Image
+                            src='/assets/avatars/elephant.png'
+                            alt="avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full cursor-pointer"
+                            onClick={
+                                () => {
+                                    setAvatar();
+                                }
+                            }
+                        />
+
+                        <Image
+                            src='/assets/avatars/deer.png'
+                            alt="avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full cursor-pointer"
+                            onClick={
+                                () => {
+                                    setAvatar();
+                                }
+                            }
+                        />
+                        <Image
+                            src='/assets/avatars/fox.png'
+                            alt="avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full cursor-pointer"
+
+                            onClick={
+                                () => {
+                                    setAvatar();
+                                }
+                            }
+                        />
                     </div>
                 </div>
                 <form className="flex flex-col items-center justify-center ">

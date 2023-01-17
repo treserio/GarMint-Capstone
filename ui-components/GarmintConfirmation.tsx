@@ -299,12 +299,15 @@ export default function garmintConfirmation(
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
+    boxShadow: '10px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
     width: image.width + 30,
     fontWeight: 'bold',
-    top: '15px',
+    top: '25px',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
+    zIndex: 99,
   }
 
   const styleDivider: React.CSSProperties = {
@@ -339,6 +342,10 @@ export default function garmintConfirmation(
     boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
+    top: '25px',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
+    zIndex: 99,
   }
 
   const styleClassify: React.CSSProperties = {

@@ -6,6 +6,7 @@ import GarmintCheckbox from "./GarmintCheckbox";
 
 function FilterDrawer() {
 
+    const [tempSetter, setTempSetter] = useState(0);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
@@ -64,13 +65,13 @@ function FilterDrawer() {
                     <FontAwesomeIcon icon={faClose} onClick={toggleDrawer} />
                 </button>
 
-                    <p className="text-2xl font-bold text-amber-900">Filter from </p>
+                <p className="text-2xl font-bold text-[var(--burntOrange)]">Filter from </p>
                 <div className="flex justify-around items-center mb-3 pb-2 border-b-4 border-amber-900">
                     <GarmintCheckbox ref={checkTop} label="Tops" />
                     <GarmintCheckbox ref={checkBottom} label="Bottom" />
                     <GarmintCheckbox ref={checkOuter} label='Outerwear' />
                 </div>
-                    <p className="text-2xl font-bold text-amber-900">Select Outfits with these colors</p>
+                <p className="text-2xl font-bold text-[var(--burntOrange)]">Select Outfits with these colors</p>
                 <div className='grid grid-cols-3 lg:grid-cols-6 gap-2 mb-3 pb-2' >
                     <GarmintCheckbox ref={checkBlack} label='Black' />
                     <GarmintCheckbox ref={checkBlue} label='Blue' />
@@ -91,13 +92,13 @@ function FilterDrawer() {
 
                 </div> */}
                 <p className="text-2xl font-bold text-[var(--burntOrange)]">Select Outfits for these seasons</p>
-                <div className='grid grid-cols-3 mb-3 pb-2 border-b-4 gap-2 border-amber-900' >
+                <div className='grid grid-cols-3 mb-3 pb-2 border-b-4 gap-2 border-[var(--burntOrange)]' >
                     <GarmintCheckbox ref={checkSpring} label='Spring' />
                     <GarmintCheckbox ref={checkSummer} label='Summer' />
                     <GarmintCheckbox ref={checkFall} label='Fall' />
                     <GarmintCheckbox ref={checkWinter} label='Winter' />
                 </div>
-                <p className="text-2xl font-bold text-amber-900">Select Outfits for these occasions</p>
+                <p className="text-2xl font-bold text-[var(--burntOrange)]">Select Outfits for these occasions</p>
                 <div className='grid grid-cols-3 mb-3 pb-2 border-b-4 gap-2 border-amber-900' >
                     <GarmintCheckbox ref={checkActive} label='Active' />
                     <GarmintCheckbox ref={checkCasual} label='Casual' />
@@ -105,7 +106,31 @@ function FilterDrawer() {
                     <GarmintCheckbox ref={checkWork} label='Work' />
                     <GarmintCheckbox ref={checkBusinessCasual} label='Business Casual' />
                 </div>
+                <div className="">
+                    <p className="text-2xl font-bold text-[var(--burntOrange)]">Select Outfits for temperatures</p>
+                    <input
+                        id="tempSetter"
+                        className='
+                            w-2/4
+                            mx-auto
+                            mb-3
+                            pb-2
+                            border-b-4
+                            items-center
+                            bg-gray-200
+                            dark:bg-gray-800'
+                        type="range"
+                        min="32"
+                        max="110"
+                        step="1"
+
+
+
+
+                    />
+                </div>
             </div>
+
         </>
     )
 }
