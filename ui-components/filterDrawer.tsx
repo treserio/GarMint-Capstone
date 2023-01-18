@@ -43,7 +43,7 @@ function FilterDrawer() {
             <div className={
                 isDrawerOpen
                     ? "hidden"
-                    : "text-center bottom-0 left-0 right-0 transform-none absolute"
+                    : "fixed z-40 text-center bottom-0 left-0 right-0 transform-none"
             }>
                 <button
                     onClick={toggleDrawer}
@@ -53,7 +53,7 @@ function FilterDrawer() {
             </div>
 
             {/* <!-- drawer component --> */}
-            <div id="drawer-bottom"
+            <div id="drawer-bottom fixed"
                 className={
                     isDrawerOpen
 
