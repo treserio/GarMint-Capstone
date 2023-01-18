@@ -2,10 +2,9 @@ import { useRouter } from 'next/router';
 import AuthContext from '../contexts/authContext'
 // import CamApp from '../components/camApp.js';
 import { Auth } from '@aws-amplify/auth';
-import { useState, useContext } from 'react';
+import { useState, useContext, SetStateAction } from 'react';
 import Image from 'next/image';
-import { DotGothic16 } from '@next/font/google';
-import { setRevalidateHeaders } from 'next/dist/server/send-payload';
+
 
 
 export default function FirstTimeLoginInput() {
@@ -13,11 +12,13 @@ export default function FirstTimeLoginInput() {
     const [preferred_username, setPreferredName] = useState('');
     const [wash_cycle, setWashCycle] = useState('7');
     const [use_limit, setUseLimit] = useState('1');
+    const [picture, setAvatar] = useState('');
     // const [wash_notification, setWashNotification] = useState('');
 
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const toggleCam = () => setIsCameraOpen(!isCameraOpen);
     let [missingName, setMissingName] = useState(false);
+    let [missingPicture, setMissingPicture] = useState(false);
 
     const { user } = useContext(AuthContext);
 
@@ -28,6 +29,7 @@ export default function FirstTimeLoginInput() {
         console.log(preferred_username);
         console.log(wash_cycle);
         console.log(use_limit);
+
         // console.log(wash_notification);
         e.preventDefault();
         if (preferred_username === '') {
@@ -50,10 +52,23 @@ export default function FirstTimeLoginInput() {
 
     }
 
-    const setAvatar = () => {
-        const avatar = 'dog';
-        const avatarUrl = `assets/avatars/${avatar}.png`;
+    const SetAvatar = (src: SetStateAction<string> | undefined) => {
         console.log('set avatar');
+        console.log(picture);
+        if (picture === '') {
+            setMissingPicture(true);
+            return console.log('no avatar');
+        } else {
+            try {
+                Auth.updateUserAttributes(user, {
+                    'picture': picture,
+                })
+            }
+            catch (err) {
+                console.log('updated user attributes', err);
+                alert('Error updating user');
+            }
+        }
     }
 
     const getAvatar = () => {
@@ -70,21 +85,18 @@ export default function FirstTimeLoginInput() {
                 <div>
                     <p className='text-xl font-bold text-center'>Let`s start with an avatar for your profile</p>
                     <div className='flex justify-center gap-5'>
-
-
                         <Image
-                            src='/assets/avatars/dog.png'
+                            src='/assets/avatars/pig.png'
                             alt="avatar"
                             width={100}
                             height={100}
                             className="rounded-full cursor-pointer"
                             onClick={
                                 () => {
-                                    setAvatar();
+                                    SetAvatar('/assets/avatars/pig.png');
                                 }
                             }
                         />
-
                         <Image
                             src='/assets/avatars/pig.png'
                             alt="avatar"
@@ -93,11 +105,10 @@ export default function FirstTimeLoginInput() {
                             className="rounded-full cursor-pointer "
                             onClick={
                                 () => {
-                                    setAvatar();
+                                    SetAvatar('/assets/avatars/pig.png');
                                 }
                             }
                         />
-
                         <Image
                             src='/assets/avatars/elephant.png'
                             alt="avatar"
@@ -106,11 +117,10 @@ export default function FirstTimeLoginInput() {
                             className="rounded-full cursor-pointer"
                             onClick={
                                 () => {
-                                    setAvatar();
+                                    SetAvatar('/assets/avatars/elephant.png');
                                 }
                             }
                         />
-
                         <Image
                             src='/assets/avatars/deer.png'
                             alt="avatar"
@@ -119,12 +129,12 @@ export default function FirstTimeLoginInput() {
                             className="rounded-full cursor-pointer"
                             onClick={
                                 () => {
-                                    setAvatar();
+                                    SetAvatar('/assets/avatars/deer.png');
                                 }
                             }
                         />
                         <Image
-                            src='/assets/avatars/fox.png'
+                            src='/assets/avatars/deer.png'
                             alt="avatar"
                             width={100}
                             height={100}
@@ -132,7 +142,7 @@ export default function FirstTimeLoginInput() {
 
                             onClick={
                                 () => {
-                                    setAvatar();
+                                    SetAvatar('/assets/avatars/deer.png');
                                 }
                             }
                         />
