@@ -97,9 +97,9 @@ const Navbar = () => {
       <div className='flex my-1 items-center'>
         <div className='mr-4'>
           <Image
-            src={user.attributes.picture}
+            src={user.attributes.picture ? user.attributes.picture : '/assets/mintLeaf.png'}
             alt="avatar"
-            width={80}
+            width={user.attributes.picture ? 80 : 55}
             height={80}
             className='rounded-full'
           />
