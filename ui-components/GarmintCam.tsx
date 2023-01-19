@@ -149,10 +149,13 @@ export default function GarmintCam(props: any) {
 
   const styleGarmintCam: React.CSSProperties = {
     position: 'absolute',
-    alignSelf: 'center',
     boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
+    top: '25px',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
+    zIndex: 99,
   }
 
   const styleSendButton: React.CSSProperties = {

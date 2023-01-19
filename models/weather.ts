@@ -7,6 +7,8 @@ interface weatherInterface {
   rain: boolean
   snow: boolean
   expirationTime: number
+  lat: string
+  long: string
 }
 
 class Weather implements weatherInterface {
@@ -18,6 +20,8 @@ class Weather implements weatherInterface {
   rain: boolean
   snow: boolean
   expirationTime: number
+  lat: string
+  long: string
 
   constructor(
     owner_id?: String,
@@ -28,6 +32,8 @@ class Weather implements weatherInterface {
     rain?: boolean,
     snow?: boolean,
     expirationTime?: number,
+    lat?: string,
+    long?: string,
   ) {
     this.owner_id = owner_id ? owner_id : ''
     this.date = date ? date : ''
@@ -37,6 +43,8 @@ class Weather implements weatherInterface {
     this.rain = rain ? rain : false
     this.snow = snow ? snow : false
     this.expirationTime = expirationTime ? expirationTime : 0
+    this.lat = lat ? lat : ''
+    this.long = long ? long : ''
   }
 
   toJson(): any {return JSON.stringify(this)}

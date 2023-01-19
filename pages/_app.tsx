@@ -15,6 +15,7 @@ import AppContext, { AppInfo } from '../contexts/appContext'
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import NavBar from '../ui-components/navBar'
+import Loading from '../ui-components/Loading'
 
 
 Amplify.configure({ ...config, ssr: true })
@@ -57,7 +58,11 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
             <AuthContext.Provider value={{ user, setUser }}>
                 <AppContext.Provider value={{ appContext, setAppContext }}>
-                    {user ? <NavBar /> : null}
+                    {user ?
+                      appContext.getcha ?
+                        <Loading width={80} height={80} />
+                      : <NavBar />
+                    : null}
                     <Component {...pageProps} />
                 </AppContext.Provider>
             </AuthContext.Provider>

@@ -8,7 +8,7 @@ import GarmintCheckbox from "./GarmintCheckbox"
 import TemperatureRange from './TemperatureRange'
 // context
 import AuthContext from "../contexts/authContext"
-import AppContext from '../contexts/appContext'
+import AppContext, { AppInfo } from '../contexts/appContext'
 // model
 import Garmint from '../models/garmint'
 
@@ -274,7 +274,9 @@ export default function garmintConfirmation(
         Item.type.includes('bottom') && appContext.bottoms.push(Item)
         // need to setup outerwear
         console.log('after add', appContext)
-        setAppContext(appContext)
+        // state updates require a new object
+        const newContext = new AppInfo()
+        setAppContext(Object.assign(newContext, appContext))
         cleanState()
       })
     }
@@ -299,12 +301,15 @@ export default function garmintConfirmation(
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
+    boxShadow: '10px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
     width: image.width + 30,
     fontWeight: 'bold',
-    top: '15px',
+    top: '25px',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
+    zIndex: 99,
   }
 
   const styleDivider: React.CSSProperties = {
@@ -339,6 +344,10 @@ export default function garmintConfirmation(
     boxShadow: '0px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
+    top: '25px',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
+    zIndex: 99,
   }
 
   const styleClassify: React.CSSProperties = {

@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import ProfileCard from './ProfileCard';
 import { Auth } from '@aws-amplify/auth'
 import AppContext, { AppInfo } from '../contexts/appContext'
 import { useRouter } from 'next/router';
@@ -12,101 +11,201 @@ import AuthContext from "../contexts/authContext"
 import GarMint from '../models/garmint';
 import GarmintCam  from './GarmintCam';
 
-const appInfo = new (AppInfo)
-
 const Navbar = () => {
 	const { user, setUser } = useContext(AuthContext)
 	const { appContext, setAppContext } = useContext(AppContext)
-	const [nav, setNav] = useState(false);
-	let seasonTops = []
-	let seasonBottoms = []
-	let dirtyTops = []
-	let dirtyBottoms = []
-	let washPercent = 0
+
+  const [seasonalTops, setSeasonalTops] = useState<Array<GarMint>>([])
+  const [seasonalBottoms, setSeasonalBottoms] = useState<Array<GarMint>>([])
+  const [washPercent, setWashPercent] = useState(0)
+  // const [avgWeather, setAvgWeather] = useState<number | undefined>(0)
+  const [refresh, setRefresh] = useState(false)
+
+  // for activating the camera
+  const [isCameraOpen, setIsCameraOpen] = useState(false)
+  const toggleCam = () => setIsCameraOpen(!isCameraOpen)
 
 	const router = useRouter()
 
 	useEffect(() => {
-		appInfo.getUserGarmints(setAppContext)
-		const season = "fall"
+    if (appContext.garmintCount) {
+      const seasonalTops = appContext.tops.filter(item => {
+        let check = false
+        if (item.uses > item.worn) {
+          for (let season of appContext.seasons) {
+            check = item.styles.includes(season)
+            if (check) break
+          }
+        }
+        return check
+      })
+      const seasonalBottoms = appContext.bottoms.filter(item => {
+        let check = false
+        if (item.uses > item.worn) {
+          for (let season of appContext.seasons) {
+            check = item.styles.includes(season)
+            if (check) break
+          }
+        }
+        return check
+      })
+      const dirtyTops = appContext.tops.filter(item => {
+        let check = false
+        if (item.uses === item.worn) {
+          for (let season of appContext.seasons) {
+            check = item.styles.includes(season)
+            if (check) break
+          }
+        }
+        return check
+      })
+      const dirtyBottoms = appContext.bottoms.filter(item => {
+        let check = false
+        if (item.uses === item.worn) {
+          for (let season of appContext.seasons) {
+            check = item.styles.includes(season)
+            if (check) break
+          }
+        }
+        return check
+      })
+      if (seasonalTops.length || seasonalBottoms.length) {
+        setSeasonalTops(seasonalTops)
+        setSeasonalBottoms(seasonalBottoms)
+        setWashPercent(Math.round(
+          (dirtyTops.length + dirtyBottoms.length) /
+          (seasonalTops.length + seasonalBottoms.length) * 100
+        ))
+      }
+      console.log('NBar Weather', appContext.weather)
+      setTimeout(() => setRefresh((prevRefresh) => !prevRefresh), 333)
+    }
 
-		seasonTops = appContext.tops.filter(item =>
-			item.styles.includes(season) && item.uses > item.worn
-		)
-		seasonBottoms = appContext.bottoms.filter(item =>
-			item.styles.includes(season) && item.uses > item.worn
-		)
-		dirtyTops = appContext.tops.filter(item =>
-			 item.uses === item.worn
-		)
-		dirtyBottoms = appContext.bottoms.filter(item =>
-			item.uses === item.worn
-		)
+  }, [appContext.garmintCount, appContext.weather])
 
-		if (seasonTops.length || seasonBottoms.length) {
-			washPercent = Math.round((dirtyTops.length + dirtyBottoms.length) / (appContext.tops.length + appContext.bottoms.length) * 100)
-		}
+	return (<>
+		<div
+      className="
+        w-full
+        flex
+        justify-between
+        items-center
+        px-5
+      "
+      id="Navbar"
+    >
+      <div className='flex my-1 items-center'>
+        <div className='mr-4'>
+          <Image
+            src={'/assets/avatars/avatar1.png'}
+            alt="avatar"
+            width={80}
+            height={80}
+            className='rounded-full'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <div className='
+            capitalize
+            font-bold
+            mb-1
+            text-[var(--burntOrange)]
+            text-3xl
+            justify-center
+          '>
+            {user.attributes.preferred_username}
+          </div>
+          <div className='flex justify-around items-center gap-3.5 text-3xl text-[var(--mint)]' >
+            <div className='flex gap-1 items-center'>
+              {seasonalTops.length}
+              <FontAwesomeIcon icon={fas.faShirt} />
+            </div>
+            <div className='flex gap-1 items-center'>
+              {seasonalBottoms.length}
+              <Image
+                src='/assets/icons/pants.png'
+                alt='Best Pants Ever'
+                width={22}
+                height={40}
+              />
+            </div>
+            <div className='flex items-center'>
+              {washPercent}%
+              <Image
+                src='/assets/icons/washing-machine-icon.webp'
+                alt='washing machine'
+                width={40}
+                height={40}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={toggleCam}
+      >
+        <FontAwesomeIcon icon={fas.faCameraRetro} className='text-6xl text-[var(--mint)]' />
+      </button>
+      {appContext.weather ?
+      <div className='flex gap-1 items-center'>
+        <div
+          id='low'
+          className='
+            text-cyan-400
+            text-2xl
+            font-bold
+          '
+        >
+          {appContext.weather.low}&#176;
+        </div>
+        <div
+          id='avg'
+          className='
+            text-6xl
+            text-[var(--mint)]
+            text-center
+            font-bold
+            ml-1
+            pb-1
+          '
+        >
+          {appContext.weather.avg}&#176;
+        </div>
+        <div
+          id='high'
+          className='
+            text-rose-500
+            text-2xl
+            font-bold
+          '
+        >
+          {appContext.weather.high}&#176;
+        </div>
+      </div>
+      : <button
+          className='
+            button
+            leading-none
+          '
+          onClick={() => setRefresh((prevRefresh) => !prevRefresh)}
+        >
+          check<br />weather
+        </button>
+      }
 
-})
-
-	console.log(nav);
-	const handleNav = () => {
-		setNav(!nav);
-	}
-
-	return (
-
-		<div className="w-full h-32 shadow-xl shadow-green-400 dark:shadow-xl dark:shadow-green-300 bg-lime-800 dark:bg-slate-700" id="Navbar">
-			<div className="flex w-full h-full px-3 2xl:px-16" >
-				<div className='item-center pr-3'>
-					<Image src={'/assets/profile_HST.jpg'} alt="Tofer" width={75} height={65} className='rounded-full mt-5' />
-				</div>
-				<div className='grid grid-rows-3 grid-flow-col gap-4 w-full text-white'>
-					<p className='capitalize font-bold mt-4 mb-2 text-amber-900 '>{user.attributes.preferred_username}</p>
-					<FontAwesomeIcon icon={fas.faShirt} className='text-lg text-green-400'></FontAwesomeIcon>
-                    {seasonTops.length}
-                    <Image src={'/assets/icons/pants_icon.webp'} alt='icon_pants' width={30} height={30} className='fill-green-300 dark:fill-green-400'></Image>
-                    {seasonBottoms.length}
-					<p>
-                        <FontAwesomeIcon icon={fas.faFoucet} className='text-lg text-amber-900'></FontAwesomeIcon>
-                        {washPercent}
-                    </p>
-
-				</div>
-
-                <button
-                onClick={() => {}}>
-                    <FontAwesomeIcon icon={fas.faCameraRetro} className='text-lg text-amber-900 pr-6'></FontAwesomeIcon>
-                </button>
-				<div className='hidden md:flex left-0 top-0 z-10 text-white'>
-
-					<button onClick={async () => {
-						await Auth.signOut()
-						setUser(null)
-						setAppContext(new AppInfo())
-						router.push('/')
-
-					}}><FontAwesomeIcon icon={fas.faRightFromBracket}></FontAwesomeIcon></button>
-				</div>
-				{/* Hamburger Icon */}
-				<div
-					onClick={handleNav}
-					className='md:hidden'
-				>
-					<FontAwesomeIcon icon={fas.faBars} className='ml-10 text-sm' />
-				</div>
-
-			</div>
-			<div
-				className={
-					nav
-						? 'md:hidden fixed left-0 top-0 w-3/4 h-screen bg-green-400 z-10'
-						: 'hidden'
-				} >
-				<ProfileCard />
-			</div>
-		</div>
-	)
+      <button
+        onClick={async () => {
+          await Auth.signOut()
+          setUser(null)
+          setAppContext(new AppInfo())
+          router.push('/')
+        }}
+      >
+        <FontAwesomeIcon icon={fas.faRightFromBracket} className='text-6xl text-[var(--mint)]' />
+      </button>
+    </div>
+    {isCameraOpen && <GarmintCam toggleCam={toggleCam} />}
+  </>)
 }
 
 export default Navbar;

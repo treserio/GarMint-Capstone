@@ -1,7 +1,8 @@
 import Weather from '../models/weather'
 
 // api provides 7 days max of weather info
-export default async function fetchWeatherNWS(...days: Weather[]): Promise<Weather | undefined> {
+export default async function fetchWeatherNWS(lat: string, long: string, ...days: Weather[]): Promise<Weather | undefined> {
+  console.log('fetching', lat, long)
   if (!days.length || days.length > 7) {
     console.log('fetchWeather can update 7 days worth of weather, 0 or more than 7 requested were requested')
     return undefined
@@ -13,8 +14,8 @@ export default async function fetchWeatherNWS(...days: Weather[]): Promise<Weath
   // const long = '-96.0138'
   // okc
   // https://api.weather.gov/points/35.4676,-97.5164
-  const lat ='35.4676'
-  const long ='-97.5164'
+  // const lat ='35.4676'
+  // const long ='-97.5164'
   // new orleans
   // const lat = '29.9511'
   // const long = '-90.0715'
@@ -62,6 +63,8 @@ export default async function fetchWeatherNWS(...days: Weather[]): Promise<Weath
       day.snow = dayFilter.reduce(
         (val: boolean, time: any): boolean => val || time.shortForecast.includes('snow'), false
       )
+      day.lat = lat
+      day.long = long
     }
 
     return days[0]

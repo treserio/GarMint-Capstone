@@ -5,7 +5,7 @@
 
 :root {
   --mint: hsl(158.1, 48.8%, 50%);
-  --mint-shaded: hsl(158.1, 59%, 10%);
+  --mint-shaded: hsl(158.1, 59%, 35%);
   --mint-faded: hsl(158.1, 59%, 90%);
   --sienna: hsl(16, 100%, 46%);
   --sienna-faded: hsl(16, 100%, 90%);
@@ -39,7 +39,8 @@
 
   --highUrl: url(/assets/icons/sm-blazingSun.png);
   --lowUrl: url(/assets/icons/sm-snowflake.png);
-  --trackImgX: 50%
+  --trackImgTop: 50%
+  --trackImgBot: 50%
 }
 /*In App Buttons */
 .button {
@@ -660,7 +661,8 @@
 
 /* Carousel Styles  */
 
-#card_track {
+#top_track,
+#bot_track {
     display: flex;
     gap: 4vmin;
     position: absolute;
@@ -674,9 +676,16 @@
   height: 350px;
 }
 
-#card_track img {
+#top_track img {
   width: 40vmin;
   height: 350px;
   object-fit: cover;
-  object-position: var(--trackImgX) 50%;
+  object-position: var(--trackImgTop) 50%;
+}
+
+#bot_track img {
+  width: 40vmin;
+  height: 350px;
+  object-fit: cover;
+  object-position: var(--trackImgBot) 50%;
 }

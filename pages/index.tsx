@@ -12,19 +12,15 @@ import Dashboard from './dashboard'
 
 export default function Home() {
   const { user, setUser } = useContext(AuthContext)
-  const { appContext } = useContext(AppContext)
-  const [ garmintCount, setGarmintCount ] = useState(appContext.garmintCount)
+  const { appContext, setAppContext } = useContext(AppContext)
 
-  useEffect(() => {
-    console.log('running index effect')
-    if (!appContext.weather) {
-      appContext.getWeather()
-    }
-    if (!appContext.garmintCount) {
-      appContext.getUserGarmints(setGarmintCount)
-    }
-  }, [user])
-
+  // useEffect(() => {
+  //   console.log('running index effect')
+  //   if (!appContext.weather) {
+  //     appContext.getWeather()
+  //   }
+  // }, [user])
+  console.log('garmintCount', appContext.garmintCount)
   return (
     <>
       {user ? user.attributes.preferred_username ? <Dashboard /> : <FirstTimeLoginInput />
@@ -32,6 +28,7 @@ export default function Home() {
           <Authenticator>
             {({ user }) => {
               setUser(user)
+              appContext.getUserGarmints(setAppContext)
               return <></>
             }}
           </Authenticator>
