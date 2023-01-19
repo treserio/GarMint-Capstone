@@ -17,6 +17,9 @@ export class AppInfo {
   garmintCount: number
   // get from weather api
   weather?: Weather
+  getcha: boolean
+  // month.date for numeric comparison for seasons, maybe 15th of month before / after for overlap
+  seasons: Array<string>
 
   constructor() {
     // db access
@@ -32,10 +35,28 @@ export class AppInfo {
     this.bottoms = []
     this.garmintCount = 0
     this.garmintTypes = ['tops', 'bottoms']
+    this.getcha = true
     // stretch goal of working hours, maybe when you sleep
+    this.seasons = this.getSeasons()
   }
 
-  async getUserGarmints(setGarmintCount: any): Promise<void> {
+  getSeasons(): Array<string> {
+    const today = new Date()
+    const dateValue = today.getMonth() + 1 + today.getDate() * 0.01
+    const seasonArray: Array<string>  = []
+    // seasons with 15 days of overlap
+    // dec, jan, feb
+    if (dateValue >= 11.15 || dateValue <= 3.15) seasonArray.push('winter')
+    // mar, apr, may
+    if (dateValue >= 2.15 && dateValue <= 6.15) seasonArray.push('spring')
+    // jun, jul, aug
+    if (dateValue >= 5.15 && dateValue <= 9.15) seasonArray.push('summer')
+    // sep, oct, nov
+    if (dateValue >= 7.15 && dateValue <= 12.15) seasonArray.push('fall')
+    return seasonArray
+  }
+
+  async getUserGarmints(setAppContext: any) {
     let user = null
     try {
       user = await Auth.currentAuthenticatedUser()
@@ -43,9 +64,9 @@ export class AppInfo {
       return
     }
     // console.log('getUserGarmints #=', this.garmintCount)
-    if (user && this.garmintCount === 0) {
+    if (user && this.getcha) {
       // stop the query from running multiple times, and 0 on error, else add correct val
-      this.garmintCount = 1
+      this.getcha = false
       // setup the query parameters
       const params: DynamoDB.DocumentClient.QueryInput = {
         TableName: 'garmints',
@@ -56,24 +77,22 @@ export class AppInfo {
           ':num': 0,
         },
       }
+      const that = new AppInfo()
       // run query and use data in callback
       // console.log('\nRunningQuery\n')
-      this.db.query(params, (err, data) => {
+      this.db.query(params, async (err, data) => {
+				// console.log('data test for count:', data)
         if (data?.Count != 0) {
-          this.tops = data!.Items!.filter((item: any) => item.type == 'top')
+          that.tops = data!.Items!.filter((item: any) => item.type == 'top')
             .map((item) => Garmint.fromJson(item))
-          this.bottoms = data!.Items!.filter((item: any) => item.type == 'bottom')
+          that.bottoms = data!.Items!.filter((item: any) => item.type == 'bottom')
             .map((item) => Garmint.fromJson(item))
         }
-        // may need to refresh
-        setGarmintCount(data.Count)
-        this.garmintCount = data.Count!
-        // console.log('tops:', this.tops)
-        // console.log('bottoms:', this.bottoms)
-        console.log('garmintCount', this.garmintCount)
+        that.garmintCount = data.Count!
+        await that.getWeather()
+        setAppContext(that)
         if (err) {
           console.log('getUserGarmints Error:', err)
-          this.garmintCount = 0
         }
       })
     }
@@ -89,13 +108,13 @@ export class AppInfo {
       return
     }
     // stop multiple runs, useEffect has odd behaviors with async functions
-    if (this.weather) return
-    this.weather = new Weather()
+    if (!this.getcha) return
+    this.getcha = false
     // find today, and adjust for timezone
     const dateToday = new Date()
     dateToday.setMinutes(dateToday.getMinutes() - dateToday.getTimezoneOffset())
     const dateString = dateToday.toISOString().split('T')[0]
-    console.log('dateString', dateString)
+    // console.log('dateString', dateString)
     const params: DynamoDB.DocumentClient.QueryInput = {
       TableName: 'weather',
       KeyConditionExpression: `owner_id = :id AND #sortKey = :val`,
@@ -108,15 +127,13 @@ export class AppInfo {
         ':val': dateString,
       },
     }
-    this.db.query(params, (err, data) => {
+    this.db.query(params, async (err, data) => {
       // if query errs or if there isn't a weather value for today
       if (err || !data.Count) {
         console.log(err)
-        this.weather = undefined
-        this.getWeatherNWS()
+        await this.getWeatherNWS()
       } else {
         this.weather = Weather.fromJson(data.Items![0])
-        console.log(this.weather)
       }
     })
   }
@@ -132,7 +149,6 @@ export class AppInfo {
     // stop multiple runs
     if (this.weather) return
     const todaysWeather = new Weather()
-    this.weather = todaysWeather
     const tomorrowsWeather = new Weather()
     // create date time for today and tomorrow
     const dateToday = new Date()
@@ -153,38 +169,39 @@ export class AppInfo {
     // set date strings
     todaysWeather.date = dateToday.toISOString().split('T')[0]
     tomorrowsWeather.date = dateTomorrow.toISOString().split('T')[0]
-    console.log('tDate', todaysWeather.date)
-    console.log('tomDate', tomorrowsWeather.date)
-    // set weather values for today and tomorrow, can fetch a max of 7 days
-    this.weather = await fetchWeatherNWS(todaysWeather, tomorrowsWeather)
 
-    console.log('this', this.weather)
-    console.log('today', todaysWeather)
-    console.log('tomorrow', tomorrowsWeather)
-    // if today's weather was found, fetch returns undefined on error
-    if (this.weather) {
-      // create our db params to send weather
-      const params: any = {
-        RequestItems: {
-          'weather': [
-            {
-              PutRequest: {
-                Item: todaysWeather
-              }
-            },
-            {
-              PutRequest: {
-                Item: tomorrowsWeather
-              }
-            },
-          ]
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude.toFixed(4)
+      const long = position.coords.longitude.toFixed(4)
+
+      // set weather values for today and tomorrow, can fetch a max of 7 days
+      this.weather = await fetchWeatherNWS(lat, long, todaysWeather, tomorrowsWeather)
+
+      // if today's weather was found, fetch returns undefined on error
+      if (this.weather) {
+        // create our db params to send weather
+        const params: any = {
+          RequestItems: {
+            'weather': [
+              {
+                PutRequest: {
+                  Item: todaysWeather
+                }
+              },
+              {
+                PutRequest: {
+                  Item: tomorrowsWeather
+                }
+              },
+            ]
+          }
         }
+        this.db.batchWrite(params, (err, data) => {
+          if (err) return console.log('batch Err:', err)
+          // console.log('batch data', data)
+        })
       }
-      this.db.batchWrite(params, (err, data) => {
-        if (err) return console.log('batch Err:', err)
-        // console.log('batch data', data)
-      })
-    }
+    }, (err) => console.log('GeoError:', err))
   }
 }
 

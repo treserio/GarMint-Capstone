@@ -2,38 +2,29 @@
 import { card } from '@aws-amplify/ui/dist/types/theme/tokens/components/card'
 import React, { forwardRef, MouseEvent, useEffect, useRef } from 'react'
 import CardItem from './cardItem'
+import GarMint from '../models/garmint'
 
 interface PropsInterface {
-  hmd: Function
-  hmm: Function
-  hmu: Function
+  id: string
+  items: Array<GarMint>
 }
 
 const GarmintSlider = forwardRef((
-  props,
+  props: PropsInterface,
   ref: React.ForwardedRef<HTMLDivElement>
 ) => {
   return (
     <div
-      id='card_track'
+      id={props.id}
       ref={ref}
       data-mouse-down-at='0'
       data-prev-percentage='-50'
       data-percentage='0'
       draggable={false}
-      // onMouseDown={e => props.hmd(e)}
-      // onMouseMove={e => props.hmm(e)}
-      // onMouseUp={e => props.hmu(e)}
     >
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
-      <CardItem />
+      {props.items.map((item) => {
+        return <CardItem garmint={item} key={`${item.item_number}`} />
+      })}
     </div>
   )
 })
