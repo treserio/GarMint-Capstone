@@ -8,7 +8,7 @@ import GarmintCheckbox from "./GarmintCheckbox"
 import TemperatureRange from './TemperatureRange'
 // context
 import AuthContext from "../contexts/authContext"
-import AppContext from '../contexts/appContext'
+import AppContext, { AppInfo } from '../contexts/appContext'
 // model
 import Garmint from '../models/garmint'
 
@@ -274,7 +274,9 @@ export default function garmintConfirmation(
         Item.type.includes('bottom') && appContext.bottoms.push(Item)
         // need to setup outerwear
         console.log('after add', appContext)
-        setAppContext(appContext)
+        // state updates require a new object
+        const newContext = new AppInfo()
+        setAppContext(Object.assign(newContext, appContext))
         cleanState()
       })
     }
