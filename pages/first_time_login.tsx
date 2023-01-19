@@ -109,7 +109,8 @@ export default function FirstTimeLoginInput() {
               place-items-center
               shadow-2xl shadow-[var(--mint)]
               dark:bg-slate-700
-              rounded-lg'
+              rounded-lg
+              px-3'
 
               >
                 <p className="text-2xl text-center px-3">Welcome to <b className='text-[var(--mint)] font-bold'>GarMint</b> your A.I. powered Fashion Valet!</p>
@@ -178,9 +179,10 @@ export default function FirstTimeLoginInput() {
                                 rounded-md
                                 placeholder-[var(--mint-faded)]"
                             onChange={(e) => setPreferredName(e.target.value)}
-                            placeholder="User Name"
+                            placeholder=" User Name"
                             color='black'
                             required
+                            style={{ width: '200px' }}
                         />
 
                         {missingName && <p className="text-red-300 text-xs">Please enter a username</p>}
@@ -195,6 +197,7 @@ export default function FirstTimeLoginInput() {
                             onChange={(e) => setWashCycle(e.target.value)}
                             placeholder=" Default: 7 days"
                             required
+                            style={{ width: '200px' }}
                         />
                         <label className="text-l font-semibold ">How many times do you ware an item before washing?</label>
                         <input
@@ -212,6 +215,7 @@ export default function FirstTimeLoginInput() {
                             max={9}
                             onChange={(e) => setUseLimit(e.target.value)}
                             placeholder=" Default: 1 use"
+                            style={{ width: '200px' }}
 
                         />
                     </div>
