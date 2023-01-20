@@ -77,7 +77,7 @@ const Navbar = () => {
           (seasonalTops.length + seasonalBottoms.length) * 100
         ))
       }
-      console.log('NBar Weather', appContext.weather)
+      // console.log('NBar Weather', appContext.weather)
       setTimeout(() => setRefresh((prevRefresh) => !prevRefresh), 333)
     }
 
@@ -144,7 +144,14 @@ const Navbar = () => {
       <button
         onClick={toggleCam}
       >
-        <FontAwesomeIcon icon={fas.faCameraRetro} className='text-6xl text-[var(--mint)]' />
+        <FontAwesomeIcon
+          icon={fas.faCameraRetro}
+          className='
+            text-6xl
+            text-[var(--mint)]
+            hover:text-[var(--mint-shaded)]
+          '
+        />
       </button>
       {appContext.weather ?
       <div className='flex gap-1 items-center'>
@@ -201,7 +208,7 @@ const Navbar = () => {
           router.push('/')
         }}
       >
-        <FontAwesomeIcon icon={fas.faRightFromBracket} className='text-6xl text-[var(--mint)]' />
+        <FontAwesomeIcon icon={fas.faRightFromBracket} className='text-6xl text-[var(--mint)] hover:text-[var(--mint-shaded)]' />
       </button>
     </div>
     {isCameraOpen && <GarmintCam toggleCam={toggleCam} />}

@@ -76,7 +76,7 @@ export default function GarmintCam(props: any) {
         }
       })
       .then((res) => {
-        console.log('axios res', res)
+        // console.log('axios res', res)
         if (res.data.predictions.length && imageData) {
           /* ######### Move Everything Into A Confirmation Component ############# */
           // set another state variable here to display it with everything we've found, maybe create initial Garmint to pass to Confirmation

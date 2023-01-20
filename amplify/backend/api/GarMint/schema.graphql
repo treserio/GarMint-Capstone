@@ -1,5 +1,0 @@
-type SimpleOne @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  postGres: String
-  SomethingElse: String
-}

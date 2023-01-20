@@ -20,7 +20,7 @@ export default function Home() {
   //     appContext.getWeather()
   //   }
   // }, [user])
-  console.log('garmintCount', appContext.garmintCount)
+
   return (
     <>
       {user ? user.attributes.preferred_username ? <Dashboard /> : <FirstTimeLoginInput />
