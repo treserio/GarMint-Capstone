@@ -2,6 +2,8 @@
 Welcome to GarMint, an AI-powered fashion valet that helps you pick the perfect outfit based on the weather and other factors by using object detection/machine learning to help store the user's inventory.
 ## Technologies Used
 * Next.js
+* React
+* Typescript
 * AWS Amplify
 * AWS Cognito
 * DynamoDB
