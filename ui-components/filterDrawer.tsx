@@ -47,7 +47,15 @@ function FilterDrawer() {
             }>
                 <button
                     onClick={toggleDrawer}
-                    className="text-white z-40 w-full bg-gray-200 hover:bg-gray-400 focus:ring-4 focus:ring-gray-300 font-medium text-md dark:bg-[var(--mint-faded)] dark:hover:bg[var(--mint-primary)] focus:outline-none " type="button" data-drawer-target="drawer-bottom-example" data-drawer-show="drawer-bottom-example" data-drawer-placement="bottom" aria-controls="drawer-bottom-example">
+                    className="
+                      z-40
+                      w-full
+                      text-[var(--amplify-colors-white)]
+                      font-bold
+                      bg-[var(--mint)]
+                      hover:bg-[var(--mint-shaded)]
+                    "
+                    type="button" data-drawer-target="drawer-bottom-example" data-drawer-show="drawer-bottom-example" data-drawer-placement="bottom" aria-controls="drawer-bottom-example">
                     <FontAwesomeIcon icon={faBars} />
                 </button>
             </div>

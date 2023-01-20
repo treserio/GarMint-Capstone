@@ -304,7 +304,7 @@ export default function garmintConfirmation(
     boxShadow: '10px 10px 100px 8px var(--mint-shaded)',
     borderRadius: '0.5rem',
     backgroundColor: 'var(--amplify-colors-white)',
-    width: image.width + 30,
+    width: image.width > 350 ? image.width + 35 : 385,
     fontWeight: 'bold',
     top: '25px',
     left: '50%',
@@ -435,7 +435,7 @@ export default function garmintConfirmation(
           width={image.width}
         />
       </div>
-      <div className='flex justify-between items-center mb-3 mt-1' style={{width: image.width}} >
+      <div className='flex justify-between items-center mb-3 mt-1 -ml-1' style={{width: image.width}} >
         <GarmintCheckbox ref={checkWinter} label='Winter' />
         <GarmintCheckbox ref={checkFall} label='Fall' />
         <GarmintCheckbox ref={checkSpring} label='Spring' />
