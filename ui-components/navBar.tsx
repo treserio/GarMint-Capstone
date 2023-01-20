@@ -77,7 +77,7 @@ const Navbar = () => {
           (seasonalTops.length + seasonalBottoms.length) * 100
         ))
       }
-      console.log('NBar Weather', appContext.weather)
+      // console.log('NBar Weather', appContext.weather)
       setTimeout(() => setRefresh((prevRefresh) => !prevRefresh), 333)
     }
 

@@ -44,9 +44,7 @@ function Dashboard() {
   const bot_track = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.log('wtf', appContext.garmintCount)
     if (appContext.garmintCount) {
-      console.log('update arrays??!?!?')
       // setSeasonalTops(appContext.tops.filter(item => {
       //   let check = false
       //   if (item.uses > item.worn) {
@@ -161,7 +159,7 @@ function Dashboard() {
     }
   }
 
-  console.log('st', seasonalTops, '\nsb', seasonalBottoms)
+  // console.log('st', seasonalTops, '\nsb', seasonalBottoms)
   return (
     <div className="flex flex-col items-center justify-center ">
       <div
