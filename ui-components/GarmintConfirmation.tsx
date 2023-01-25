@@ -257,7 +257,7 @@ export default function garmintConfirmation(
         high_temp: high,
         type: typeString,
         image: picture,
-        uses: inputUses.current?.value,
+        uses: parseInt(inputUses.current?.value!),
         worn: 0,
       })
       // console.log('garmint', Item)
@@ -270,8 +270,9 @@ export default function garmintConfirmation(
         if (err) throw err
         // maybe initialize new class and assign values
         appContext.garmintCount++
-        Item.type.includes('top') && appContext.tops.push(Item)
-        Item.type.includes('bottom') && appContext.bottoms.push(Item)
+        appContext.garmints.push(Item)
+        // Item.type.includes('top') && appContext.tops.push(Item)
+        // Item.type.includes('bottom') && appContext.bottoms.push(Item)
         // need to setup outerwear
         console.log('after add', appContext)
         // state updates require a new object

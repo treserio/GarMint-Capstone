@@ -14,7 +14,7 @@ import AppContext, { AppInfo } from '../contexts/appContext'
 
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import NavBar from '../ui-components/navBar'
+import Navbar from '../ui-components/Navbar'
 import Loading from '../ui-components/Loading'
 
 
@@ -60,7 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     {user ?
                       appContext.getcha ?
                         <Loading width={80} height={80} />
-                      : <NavBar />
+                      : <Navbar />
                     : null}
                     <Component {...pageProps} />
                 </AppContext.Provider>

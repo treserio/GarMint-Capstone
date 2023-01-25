@@ -1,7 +1,7 @@
 // import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 import { card } from '@aws-amplify/ui/dist/types/theme/tokens/components/card'
 import React, { forwardRef, MouseEvent, useEffect, useRef } from 'react'
-import CardItem from './cardItem'
+import CardItem from './CardItem'
 import GarMint from '../models/garmint'
 
 interface PropsInterface {

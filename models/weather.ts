@@ -1,5 +1,5 @@
 interface weatherInterface {
-  owner_id: String
+  owner_id: string
   date: string
   high: number
   low: number
@@ -12,7 +12,7 @@ interface weatherInterface {
 }
 
 class Weather implements weatherInterface {
-  owner_id: String
+  owner_id: string
   date: string
   high: number
   low: number
@@ -24,7 +24,7 @@ class Weather implements weatherInterface {
   long: string
 
   constructor(
-    owner_id?: String,
+    owner_id?: string,
     date?: string,
     high?: number,
     low?: number,

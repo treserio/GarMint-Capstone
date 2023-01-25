@@ -1,0 +1,92 @@
+/* ############################## */
+/* ###### Amplify Buttons ####### */
+/* ############################## */
+.amplify-button[data-variation='primary'] {
+  /* .amplify-button { */
+    background: var(--mint);
+  }
+
+.amplify-button[data-variation='primary']:hover {
+  animation-name: button-flare-shaded;
+  animation-duration: 0.35s;
+  background-color: var(--mint-shaded);
+}
+
+.federated-sign-in-button {
+  border-color: var(--mint);
+}
+
+.federated-sign-in-button:hover {
+  animation-name: button-flare-faded;
+  animation-duration: 0.35s;
+  background-color: var(--mint-faded);
+}
+
+.amplify-button--link {
+  color: var(--mint-shaded);
+  font-weight: bold !important;
+}
+
+.amplify-button--link:focus {
+  border-color: var(--mint-shaded);
+  outline: none;
+}
+
+.amplify-button--link:hover {
+  background-color: var(--mint-faded);
+}
+
+/* ############################# */
+/* ###### Amplify Divider ###### */
+/* ############################# */
+.amplify-divider {
+  border-color: var(--mint-shaded);
+}
+
+.amplify-divider--label::after {
+  color: var(--mint-shaded);
+}
+
+/* ############################ */
+/* ###### Amplify Labels ###### */
+/* ############################ */
+.amplify-label {
+  font-weight: bold;
+  color: var(--mint-shaded);
+}
+
+.amplify-text {
+  font-weight: bold;
+  color: var(--mint-shaded);
+}
+
+.amplify-input {
+  border-color: var(--mint);
+}
+
+.amplify-input:focus {
+  background-color: var(--mint-faded);
+}
+
+.amplify-input:focus-visible {
+  outline: solid var(--mint-shaded);
+  color: var(--amplify-components-tabs-item-hover-color);
+}
+
+.amplify-input:hover {
+  animation-name: button-flare-faded;
+  animation-duration: 0.35s;
+  background-color: var(--mint-faded);
+  cursor: pointer;
+}
+
+.amplify-heading--3 {
+  color: var(--mint-shaded);
+}
+
+/* ################################### */
+/* ###### Amplify data targets? ###### */
+/* ################################### */
+[data-amplify-authenticator] [data-amplify-router] {
+  border-color: var(--mint-shaded);
+}

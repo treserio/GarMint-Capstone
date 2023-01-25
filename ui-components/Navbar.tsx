@@ -11,77 +11,88 @@ import AuthContext from "../contexts/authContext"
 import GarMint from '../models/garmint';
 import GarmintCam  from './GarmintCam';
 
+interface batchMaker {
+  TransactItems: Array<any>
+}
+
 const Navbar = () => {
 	const { user, setUser } = useContext(AuthContext)
 	const { appContext, setAppContext } = useContext(AppContext)
 
-  const [seasonalTops, setSeasonalTops] = useState<Array<GarMint>>([])
-  const [seasonalBottoms, setSeasonalBottoms] = useState<Array<GarMint>>([])
-  const [washPercent, setWashPercent] = useState(0)
-  // const [avgWeather, setAvgWeather] = useState<number | undefined>(0)
+  const router = useRouter()
+
   const [refresh, setRefresh] = useState(false)
 
   // for activating the camera
   const [isCameraOpen, setIsCameraOpen] = useState(false)
   const toggleCam = () => setIsCameraOpen(!isCameraOpen)
 
-	const router = useRouter()
+  const seasonalGarmints = appContext.garmints.filter(item => {
+    let check = false
+    for (let season of appContext.seasons) {
+      check = item.styles.includes(season)
+      if (check) break
+    }
+    return check
+  })
 
-	useEffect(() => {
-    if (appContext.garmintCount) {
-      const seasonalTops = appContext.tops.filter(item => {
-        let check = false
-        if (item.uses > item.worn) {
-          for (let season of appContext.seasons) {
-            check = item.styles.includes(season)
-            if (check) break
-          }
-        }
-        return check
-      })
-      const seasonalBottoms = appContext.bottoms.filter(item => {
-        let check = false
-        if (item.uses > item.worn) {
-          for (let season of appContext.seasons) {
-            check = item.styles.includes(season)
-            if (check) break
-          }
-        }
-        return check
-      })
-      const dirtyTops = appContext.tops.filter(item => {
-        let check = false
-        if (item.uses === item.worn) {
-          for (let season of appContext.seasons) {
-            check = item.styles.includes(season)
-            if (check) break
-          }
-        }
-        return check
-      })
-      const dirtyBottoms = appContext.bottoms.filter(item => {
-        let check = false
-        if (item.uses === item.worn) {
-          for (let season of appContext.seasons) {
-            check = item.styles.includes(season)
-            if (check) break
-          }
-        }
-        return check
-      })
-      if (seasonalTops.length || seasonalBottoms.length) {
-        setSeasonalTops(seasonalTops)
-        setSeasonalBottoms(seasonalBottoms)
-        setWashPercent(Math.round(
-          (dirtyTops.length + dirtyBottoms.length) /
-          (seasonalTops.length + seasonalBottoms.length) * 100
-        ))
-      }
-      // console.log('NBar Weather', appContext.weather)
-      setTimeout(() => setRefresh((prevRefresh) => !prevRefresh), 333)
+  const dirty = seasonalGarmints.filter(item =>
+    item.uses <= item.worn
+  )
+
+  const seasonalTops = seasonalGarmints.filter(item =>
+    item.uses > item.worn && item.type == 'top'
+  )
+  const seasonalBottoms = seasonalGarmints.filter(item =>
+    item.uses > item.worn && item.type == 'bottom'
+  )
+
+  const washPercent = Math.round(
+    dirty.length / seasonalGarmints.length * 100
+  )
+
+  async function checkWeather() {
+    await appContext.getWeatherNWS()
+    setRefresh((prevRefresh) => !prevRefresh)
+  }
+
+  async function washAll() {
+    // use same method used in dashboard for marking items as worn
+    let batchParams: batchMaker = {
+      TransactItems: []
     }
 
-  }, [appContext.garmintCount, appContext.weather])
+    for (const item of dirty) {
+      const transactItem = {
+        Update: {
+          TableName: 'garmints',
+          Key: {
+            owner_id: item.owner_id,
+            item_number: item.item_number,
+          },
+          UpdateExpression: `set #a = :worn`,
+          ExpressionAttributeNames: { '#a' : 'worn'},
+          ExpressionAttributeValues: {
+            ':worn': 0
+          }
+        }
+      }
+      batchParams.TransactItems.push(transactItem)
+    }
+
+    appContext.db.transactWrite(batchParams, (err, data) => {
+      // retry if error, x times, then show user error
+      if (err) console.log('transact write Error:', err)
+      // update context with new values if db update succeeds
+      for (const item of dirty) {
+        appContext.garmints[
+          appContext.garmints.indexOf(item)
+        ].worn = 0
+      }
+      const newContext = new AppInfo()
+      setAppContext(Object.assign(newContext, appContext))
+    })
+  }
 
 	return (<>
 		<div
@@ -132,14 +143,27 @@ const Navbar = () => {
             <div className='flex items-center'>
               {washPercent}%
               <Image
-                src='/assets/icons/washing-machine-icon.webp'
+                src='/assets/icons/laundryBasket2.png'
                 alt='washing machine'
-                width={40}
+                width={30}
                 height={40}
               />
             </div>
           </div>
         </div>
+        <Image
+          className='
+            ml-2
+            cursor-pointer
+            bg-[var(--mint)]
+            hover:bg-[var(--mint-shaded)]
+          '
+          src='/assets/icons/washingMachineHollow.webp'
+          alt='washing machine'
+          width={40}
+          height={40}
+          onClick={washAll}
+        />
       </div>
       <button
         onClick={toggleCam}
@@ -194,7 +218,7 @@ const Navbar = () => {
             button
             leading-none
           '
-          onClick={() => setRefresh((prevRefresh) => !prevRefresh)}
+          onClick={() => checkWeather()}
         >
           check<br />weather
         </button>

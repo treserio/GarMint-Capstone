@@ -7,13 +7,28 @@ import Garmint from '../models/garmint'
 import Weather from '../models/weather'
 import fetchWeatherNWS from '../scripts/fetchWeatherNWS'
 
-export class AppInfo {
+interface AppInfoInterface {
+  db: DynamoDB.DocumentClient
+  // db tables
+  garmints: Array<Garmint>
+  // tops: Array<Garmint>
+  // bottoms: Array<Garmint>
+  // garmintTypes: Array<String>
+  garmintCount: number
+  // get from weather api
+  weather?: Weather
+  getcha: boolean
+  // month.date for numeric comparison for seasons, maybe 15th of month before / after for overlap
+  seasons: Array<string>
+}
+
+export class AppInfo implements AppInfoInterface {
   // db access
   db: DynamoDB.DocumentClient
   // db tables
-  tops: Array<Garmint>
-  bottoms: Array<Garmint>
-  garmintTypes: Array<String>
+  garmints: Array<Garmint>
+  // tops: Array<Garmint>
+  // bottoms: Array<Garmint>
   garmintCount: number
   // get from weather api
   weather?: Weather
@@ -31,10 +46,11 @@ export class AppInfo {
       }
     })
     // db tables
-    this.tops = []
-    this.bottoms = []
+    // this.tops = []
+    // this.bottoms = []
+    this.garmints = []
     this.garmintCount = 0
-    this.garmintTypes = ['tops', 'bottoms']
+    // this.garmintTypes = ['tops', 'bottoms']
     this.getcha = true
     // stretch goal of working hours, maybe when you sleep
     this.seasons = this.getSeasons()
@@ -56,7 +72,7 @@ export class AppInfo {
     return seasonArray
   }
 
-  async getUserGarmints(setAppContext: any) {
+  async getUserData(setAppContext: any) {
     let user = null
     try {
       user = await Auth.currentAuthenticatedUser()
@@ -81,19 +97,20 @@ export class AppInfo {
       // run query and use data in callback
       // console.log('\nRunningQuery\n')
       this.db.query(params, async (err, data) => {
-				// console.log('data test for count:', data)
-        if (data?.Count != 0) {
-          that.tops = data!.Items!.filter((item: any) => item.type == 'top')
-            .map((item) => Garmint.fromJson(item))
-          that.bottoms = data!.Items!.filter((item: any) => item.type == 'bottom')
-            .map((item) => Garmint.fromJson(item))
-        }
-        that.garmintCount = data.Count!
-        await that.getWeather()
-        setAppContext(that)
         if (err) {
           console.log('getUserGarmints Error:', err)
         }
+				// console.log('data test for count:', data)
+        if (data?.Count != 0) {
+          // that.tops = data!.Items!.filter((item: any) => item.type == 'top')
+          //   .map((item) => Garmint.fromJson(item))
+          // that.bottoms = data!.Items!.filter((item: any) => item.type == 'bottom')
+          //   .map((item) => Garmint.fromJson(item))
+          that.garmints = data.Items!.map((item: any) => Garmint.fromJson(item))
+        }
+        that.garmintCount = data.Count ? data.Count : 0
+        await that.getWeather()
+        setAppContext(that)
       })
     }
   }
@@ -130,7 +147,7 @@ export class AppInfo {
     this.db.query(params, async (err, data) => {
       // if query errs or if there isn't a weather value for today
       if (err || !data.Count) {
-        console.log(err)
+        if (err) console.log(err)
         await this.getWeatherNWS()
       } else {
         this.weather = Weather.fromJson(data.Items![0])

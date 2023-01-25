@@ -1,7 +1,7 @@
 import GarmintSlider from "../ui-components/GarmintSlider"
-import FilterDrawer from "../ui-components/filterDrawer"
+import FilterDrawer from "../ui-components/FilterDrawer"
 import React, { useState, useRef, useContext, useEffect } from "react"
-import AppContext from '../contexts/appContext'
+import AppContext, { AppInfo } from '../contexts/appContext'
 import GarMint from '../models/garmint'
 // import AuthContext from '../contexts/authContext'
 
@@ -10,84 +10,102 @@ import GarMint from '../models/garmint'
 //   bot: Array<GarMint>
 // }
 
-function Dashboard() {
-  const { appContext } = useContext(AppContext)
-  // const { user } = useContext(AuthContext)
+interface batchMaker {
+  TransactItems: Array<any>
+}
 
-  // const [seasonalTops, setSeasonalTops] = useState<Array<GarMint>>([])
-  // const [seasonalBottoms, setSeasonalBottoms] = useState<Array<GarMint>>([])
 
-  // let seasonalTops: Array<GarMint>  = []
-  // let seasonalBottoms: Array<GarMint>  = []
-  const seasonalTops: Array<GarMint> = appContext.tops.filter(item => {
-    let check = false
-    if (item.uses > item.worn) {
-      for (let season of appContext.seasons) {
-        check = item.styles.includes(season)
-        if (check) break
-      }
-    }
-    return check
-  })
-  const seasonalBottoms: Array<GarMint> = appContext.bottoms.filter(item => {
-    let check = false
-    if (item.uses > item.worn) {
-      for (let season of appContext.seasons) {
-        check = item.styles.includes(season)
-        if (check) break
-      }
-    }
-    return check
-  })
+export default function Dashboard() {
+  const { appContext, setAppContext } = useContext(AppContext)
 
   const top_track = useRef<HTMLDivElement>(null)
   const bot_track = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (appContext.garmintCount) {
-      // setSeasonalTops(appContext.tops.filter(item => {
-      //   let check = false
-      //   if (item.uses > item.worn) {
-      //     for (let season of appContext.seasons) {
-      //       check = item.styles.includes(season)
-      //       if (check) break
-      //     }
-      //   }
-      //   return check
-      // }))
-      // setSeasonalBottoms(appContext.bottoms.filter(item => {
-      //   let check = false
-      //   if (item.uses > item.worn) {
-      //     for (let season of appContext.seasons) {
-      //       check = item.styles.includes(season)
-      //       if (check) break
-      //     }
-      //   }
-      //   return check
-      // }))
-      // seasonalTops = appContext.tops.filter(item => {
-      //   let check = false
-      //   if (item.uses > item.worn) {
-      //     for (let season of appContext.seasons) {
-      //       check = item.styles.includes(season)
-      //       if (check) break
-      //     }
-      //   }
-      //   return check
-      // })
-      // seasonalBottoms = appContext.bottoms.filter(item => {
-      //   let check = false
-      //   if (item.uses > item.worn) {
-      //     for (let season of appContext.seasons) {
-      //       check = item.styles.includes(season)
-      //       if (check) break
-      //     }
-      //   }
-      //   return check
-      // })
+  const seasonalTops: Array<GarMint> = appContext.garmints.filter(item => {
+    let check = false
+    if (item.uses > item.worn) {
+      for (let season of appContext.seasons) {
+        check = item.styles.includes(season)
+        if (check) break
+      }
     }
+    return check && item.type == 'top'
   })
 
+  const seasonalBottoms: Array<GarMint> = appContext.garmints.filter(item => {
+    let check = false
+    if (item.uses > item.worn) {
+      for (let season of appContext.seasons) {
+        check = item.styles.includes(season)
+        if (check) break
+      }
+    }
+    return check && item.type == 'bottom'
+  })
+
+  const wearOutfit = () => {
+    console.log(top_track.current?.dataset)
+    console.log(bot_track.current?.dataset)
+    console.log('topIndex', Math.round(parseFloat(top_track.current?.dataset.prevPercentage!) * (seasonalTops.length - 1) / -100))
+    console.log('botIndex', Math.round(parseFloat(bot_track.current?.dataset.prevPercentage!) * (seasonalBottoms.length - 1) / -100))
+
+    const wornTop = seasonalTops[Math.round(
+      parseFloat(top_track.current?.dataset.prevPercentage!) * (seasonalTops.length - 1) / -100
+    )]
+    const wornBot = seasonalBottoms[Math.round(
+      parseFloat(bot_track.current?.dataset.prevPercentage!) * (seasonalBottoms.length - 1) / -100
+    )]
+    const outfitArray = []
+
+    const idxTop = appContext.garmints.indexOf(wornTop)
+    const idxBot = appContext.garmints.indexOf(wornBot)
+
+    if (idxTop > -1) {
+      appContext.garmints[idxTop].worn++
+      outfitArray.push(appContext.garmints[idxTop])
+    }
+
+    if (idxBot > - 1) {
+      appContext.garmints[idxBot].worn++
+      outfitArray.push(appContext.garmints[idxBot])
+    }
+
+    let batchParams: batchMaker = {
+      TransactItems: []
+    }
+
+    for (const item of outfitArray) {
+      const transactItem = {
+        Update: {
+          TableName: 'garmints',
+          Key: {
+            owner_id: item.owner_id,
+            item_number: item.item_number,
+          },
+          UpdateExpression: `set #a = :worn`,
+          ExpressionAttributeNames: { '#a' : 'worn'},
+          ExpressionAttributeValues: {
+            ':worn': item.worn
+          }
+        }
+      }
+      batchParams.TransactItems.push(transactItem)
+    }
+
+    if (outfitArray.length) {
+      appContext.db.transactWrite(batchParams, (err, data) => {
+        // retry if error, x times, then show user error
+        if (err) console.log('transact write Error:', err)
+        // update context with new values if db update succeeds
+        const newContext = new AppInfo()
+        setAppContext(Object.assign(newContext, appContext))
+      })
+    }
+  }
+
+  // ########################
+  // ##### Slide Action #####
+  // ########################
   const handleMouseDown = (e: React.MouseEvent) => {
     // console.log(e)
     if (e.clientY > 108 && e.clientY < 458) {
@@ -174,6 +192,7 @@ function Dashboard() {
           ref={top_track}
           items={seasonalTops}
         />
+        <div className='targetReticle' />
       </div>
       <div
         id='bot'
@@ -187,10 +206,20 @@ function Dashboard() {
           id={'bot_track'}
           items={seasonalBottoms}
         />
+        <div className='targetReticle' />
       </div>
+      <button
+        className='
+          button
+          fixed
+          bottom-10
+          right-5
+        '
+        onClick={wearOutfit}
+      >
+        Wear<br />Outfit
+      </button>
       <FilterDrawer />
     </div>
   )
 }
-
-export default Dashboard;
