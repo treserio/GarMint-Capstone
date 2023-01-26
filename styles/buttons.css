@@ -16,34 +16,11 @@
   color:  var(--amplify-colors-white);
   cursor: pointer;
   animation-name: button-flare-shaded;
-  animation-duration: 0.35s;
+  animation-duration: 0.25s;
 }
 
 .button:active {
   transform: translateY(2px);
-}
-
-.newButton {
-  color:  var(--amplify-colors-white);
-  font-weight: bold;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-  /* height: '40px'; */
-  text-align: 'center';
-  /* width: '130px'; */
-  border-radius:'40px';
-  background-color: #fff;
-  border: '2px solid $green';
-
-  letter-spacing: '1px';
-  text-shadow: 0;
-  font-size: '12px';
-  font-weight: bold;
-  cursor: 'pointer';
-  transition: 'all 0.25s ease';
-  background-color: var(--mint);
 }
 
 /* ################################## */
@@ -79,12 +56,35 @@
 /* ############################################### */
 /* ##### Experimenting with Morphing Buttons ##### */
 /* ############################################### */
+.newButton {
+  color:  var(--amplify-colors-white);
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  /* height: '40px'; */
+  text-align: 'center';
+  /* width: '130px'; */
+  border-radius:'40px';
+  background-color: #fff;
+  border: '2px solid $green';
+
+  letter-spacing: '1px';
+  text-shadow: 0;
+  font-size: '12px';
+  font-weight: bold;
+  cursor: 'pointer';
+  transition: 'all 0.25s ease';
+  background-color: var(--mint);
+}
+
 .newButton:hover {
   background-color: var(--mint-shaded);
   color:  var(--amplify-colors-white);
   cursor: pointer;
   animation-name: button-flare-shaded;
-  animation-duration: 0.35s;
+  animation-duration: 0.25s;
 }
 
 .newButton:after {
@@ -118,6 +118,20 @@
 .validate:after {
   font-family:'FontAwesome';
   content:"\f00c";
+}
+
+
+/* ########################## */
+/* ###### Image Button ###### */
+/* ########################## */
+.img-button {
+  background-color: var(--mint);
+}
+
+.img-button:hover {
+  background-color: var(--mint-shaded);
+  animation-name: button-flare-shaded;
+  animation-duration: 0.25s;
 }
 
 /* ######################## */

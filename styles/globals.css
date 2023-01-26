@@ -6,6 +6,8 @@
 @import 'buttons.css';
 @import 'amplify.css';
 @import 'TemperatureRange.css';
+@import 'text.css';
+@import url('/font-awesome-4.6.3/css/font-awesome.min.css');
 
 :root {
   --mint: hsl(158.1, 48.8%, 50%);
@@ -66,4 +68,9 @@
 
 .cardItem {
   user-select: none;
+}
+
+.washPercentage {
+  width: 94px;
+  text-align: end;
 }

@@ -8,7 +8,7 @@ import { Auth } from '@aws-amplify/auth'
 import AppContext, { AppInfo } from '../contexts/appContext'
 import { useRouter } from 'next/router';
 import AuthContext from "../contexts/authContext"
-import GarMint from '../models/garmint';
+import Garmint from '../models/garmint';
 import GarmintCam  from './GarmintCam';
 
 interface batchMaker {
@@ -22,10 +22,26 @@ const Navbar = () => {
   const router = useRouter()
 
   const [refresh, setRefresh] = useState(false)
+  const toggleRefresh = () => setRefresh((prevRefresh) => !prevRefresh)
+
+  const [displaySeasonal, setDisplaySeasonal] = useState(true)
+  const toggleDisplaySeasonal = () => setDisplaySeasonal((prevRefresh) => !prevRefresh)
 
   // for activating the camera
   const [isCameraOpen, setIsCameraOpen] = useState(false)
-  const toggleCam = () => setIsCameraOpen(!isCameraOpen)
+  const toggleCam = () => setIsCameraOpen((prevRefresh) => !prevRefresh)
+
+  console.log(appContext)
+
+  const allClean = appContext.garmints.filter(item =>
+    item.uses > item.worn
+  )
+  const allDirty = appContext.garmints.filter(item =>
+    item.uses <= item.worn
+  )
+  const allWashPercent = Math.round(
+    allDirty.length / appContext.garmintCount * 100
+  )
 
   const seasonalGarmints = appContext.garmints.filter(item => {
     let check = false
@@ -35,34 +51,43 @@ const Navbar = () => {
     }
     return check
   })
-
-  const dirty = seasonalGarmints.filter(item =>
+  const seasonalDirty = seasonalGarmints.filter(item =>
     item.uses <= item.worn
   )
-
   const seasonalTops = seasonalGarmints.filter(item =>
     item.uses > item.worn && item.type == 'top'
   )
   const seasonalBottoms = seasonalGarmints.filter(item =>
     item.uses > item.worn && item.type == 'bottom'
   )
-
-  const washPercent = Math.round(
-    dirty.length / seasonalGarmints.length * 100
+  const seasonalWashPercent = Math.round(
+    seasonalDirty.length / seasonalGarmints.length * 100
   )
 
   async function checkWeather() {
     await appContext.getWeatherNWS()
-    setRefresh((prevRefresh) => !prevRefresh)
+    toggleRefresh()
   }
 
-  async function washAll() {
+  async function washing(type: string) {
     // use same method used in dashboard for marking items as worn
     let batchParams: batchMaker = {
       TransactItems: []
     }
+    let washArray: Array<Garmint> = []
 
-    for (const item of dirty) {
+    switch (type) {
+      case 'all':
+        washArray = allDirty
+        break;
+      case 'seasonal':
+        washArray = seasonalDirty
+        break;
+      default:
+        washArray = []
+    }
+
+    for (const item of washArray) {
       const transactItem = {
         Update: {
           TableName: 'garmints',
@@ -84,7 +109,7 @@ const Navbar = () => {
       // retry if error, x times, then show user error
       if (err) console.log('transact write Error:', err)
       // update context with new values if db update succeeds
-      for (const item of dirty) {
+      for (const item of allDirty) {
         appContext.garmints[
           appContext.garmints.indexOf(item)
         ].worn = 0
@@ -115,24 +140,68 @@ const Navbar = () => {
             className='rounded-full'
           />
         </div>
-        <div className='flex flex-col'>
-          <div className='
-            capitalize
-            font-bold
-            mb-1
-            text-[var(--burntOrange)]
-            text-3xl
-            justify-center
-          '>
-            {user.attributes.preferred_username}
+        <div
+          className='
+            flex
+            flex-col
+            cursor-pointer
+          '
+          onClick={toggleDisplaySeasonal}
+        >
+          <div
+            className='
+              flex
+              justify-between
+              items-center
+              mb-1
+              text-[var(--burntOrange)]
+              font-bold
+            '
+          >
+            <div
+              className='
+                flex
+                justify-between
+                capitalize
+                text-3xl
+              '
+            >
+              {user.attributes.preferred_username}
+            </div>
+            {displaySeasonal ? <small>seasonal</small> : <small>all</small>}
           </div>
-          <div className='flex justify-around items-center gap-3.5 text-3xl text-[var(--mint)]' >
-            <div className='flex gap-1 items-center'>
-              {seasonalTops.length}
+          <div
+            className='
+              flex
+              justify-around
+              items-center
+              gap-3.5
+              text-3xl
+              text-[var(--mint)]
+            '
+          >
+            <div
+              className='
+                flex
+                gap-1
+                items-center
+              '
+            >
+              {displaySeasonal ? seasonalTops.length
+                : allClean.filter((item) => item.type === 'top').length
+              }
               <FontAwesomeIcon icon={fas.faShirt} />
             </div>
-            <div className='flex gap-1 items-center'>
-              {seasonalBottoms.length}
+            <div
+              className='
+                flex
+                gap-1
+                items-center
+              '
+            >
+              {displaySeasonal ? seasonalBottoms.length
+                : allClean.filter((item) => item.type === 'bottom').length
+              }
               <Image
                 src='/assets/icons/pants.png'
                 alt='Best Pants Ever'
@@ -140,8 +209,8 @@ const Navbar = () => {
                 height={40}
               />
             </div>
-            <div className='flex items-center'>
-              {washPercent}%
+            <div className='flex items-center justify-end washPercentage'>
+              {displaySeasonal ? seasonalWashPercent : allWashPercent}%
               <Image
                 src='/assets/icons/laundryBasket2.png'
                 alt='washing machine'
@@ -155,26 +224,25 @@ const Navbar = () => {
           className='
             ml-2
             cursor-pointer
-            bg-[var(--mint)]
-            hover:bg-[var(--mint-shaded)]
+            img-button
           '
           src='/assets/icons/washingMachineHollow.webp'
           alt='washing machine'
           width={40}
           height={40}
-          onClick={washAll}
+          onClick={() => displaySeasonal ? washing('seasonal') : washing('all')}
         />
       </div>
       <button
         onClick={toggleCam}
       >
         <FontAwesomeIcon
-          icon={fas.faCameraRetro}
           className='
             text-6xl
             text-[var(--mint)]
             hover:text-[var(--mint-shaded)]
           '
+          icon={fas.faCameraRetro}
         />
       </button>
       {appContext.weather ?

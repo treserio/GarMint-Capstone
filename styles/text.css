@@ -1,0 +1,16 @@
+.animated-text {
+  color: var(--mint)
+}
+
+.animated-text:hover {
+  background: var(--mint-shaded);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation-name: button-flare-shaded;
+  animation-duration: 0.25s;
+}
+
+.animated-text::before {
+  content: "\f030";
+}
