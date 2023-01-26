@@ -1,0 +1,473 @@
+/* ######################### */
+/* ###### App Buttons ###### */
+/* ######################### */
+.button {
+  background-color: var(--mint);
+  color:  var(--amplify-colors-white);
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--mint-shaded);
+  color:  var(--amplify-colors-white);
+  cursor: pointer;
+  animation-name: button-flare-shaded;
+  animation-duration: 0.25s;
+}
+
+.button:active {
+  transform: translateY(2px);
+}
+
+/* ################################## */
+/* ###### Animated Check Boxes ###### */
+/* ################################## */
+.garmintCheckbox input + div > label {
+  color: var(--amplify-colors-white);
+  background-color: var(--mint);
+  transition: all 0.35s ease;
+  cursor: pointer;
+  margin-bottom: 50px;
+}
+
+.garmintCheckbox input:checked + div > label {
+  color: var(--burntOrange);
+  background-color: var(--mint-faded);
+  padding-left: 30px;
+}
+
+.fadeInCheck {
+  transform: translateX(-10px);
+  color: var(--burntOrange);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+/* on click of garmintCheck fade in check and move into border */
+.garmintCheckbox input:checked + div > .fadeInCheck {
+  transform: translateX(25px);
+  opacity: 1;
+}
+
+/* ############################################### */
+/* ##### Experimenting with Morphing Buttons ##### */
+/* ############################################### */
+.newButton {
+  color:  var(--amplify-colors-white);
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  /* height: '40px'; */
+  text-align: 'center';
+  /* width: '130px'; */
+  border-radius:'40px';
+  background-color: #fff;
+  border: '2px solid $green';
+
+  letter-spacing: '1px';
+  text-shadow: 0;
+  font-size: '12px';
+  font-weight: bold;
+  cursor: 'pointer';
+  transition: 'all 0.25s ease';
+  background-color: var(--mint);
+}
+
+.newButton:hover {
+  background-color: var(--mint-shaded);
+  color:  var(--amplify-colors-white);
+  cursor: pointer;
+  animation-name: button-flare-shaded;
+  animation-duration: 0.25s;
+}
+
+.newButton:after {
+  content:"";
+}
+
+.onclic {
+  width: 40px;
+  border-color: var(--mint);
+  border-width: 3px;
+  font-size: 0;
+  border-left-color: var(--mint);
+  animation: rotating 2s 0.25s linear infinite;
+}
+
+.onclic:after {
+  content:"";
+}
+
+/* .onclic:hover {
+  color:$green;
+  background: white;
+} */
+
+.validate {
+  font-size:13px;
+  color: white;
+  background: var(--mint);
+}
+
+.validate:after {
+  font-family:'FontAwesome';
+  content:"\f00c";
+}
+
+
+/* ########################## */
+/* ###### Image Button ###### */
+/* ########################## */
+.img-button {
+  background-color: var(--mint);
+}
+
+.img-button:hover {
+  background-color: var(--mint-shaded);
+  animation-name: button-flare-shaded;
+  animation-duration: 0.25s;
+}
+
+/* ######################## */
+/* ###### ANIMATIONS ###### */
+/* ######################## */
+
+/* ########################## */
+/* ###### Flare Shaded ###### */
+/* ########################## */
+@keyframes button-flare-shaded {
+  0% {
+    background: linear-gradient(
+      110deg,
+      var(--amplify-colors-white) 2%,
+      var(--mint-shaded) 7%
+    );
+  }
+  5% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 2%,
+      var(--amplify-colors-white) 7%,
+      var(--mint-shaded) 12%
+    );
+  }
+  10% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 7%,
+      var(--amplify-colors-white) 12%,
+      var(--mint-shaded) 17%
+    );
+  }
+  15% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 12%,
+      var(--amplify-colors-white) 17%,
+      var(--mint-shaded) 22%
+    );
+  }
+  20% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 17%,
+      var(--amplify-colors-white) 22%,
+      var(--mint-shaded) 27%
+    );
+  }
+  25% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 22%,
+      var(--amplify-colors-white) 27%,
+      var(--mint-shaded) 32%
+    );
+  }
+  30% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 27%,
+      var(--amplify-colors-white) 32%,
+      var(--mint-shaded) 37%
+    );
+  }
+  35% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 32%,
+      var(--amplify-colors-white) 37%,
+      var(--mint-shaded) 42%
+    );
+  }
+  40% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 37%,
+      var(--amplify-colors-white) 42%,
+      var(--mint-shaded) 47%
+    );
+  }
+  45% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 42%,
+      var(--amplify-colors-white) 47%,
+      var(--mint-shaded) 52%
+    );
+  }
+  50% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 47%,
+      var(--amplify-colors-white) 52%,
+      var(--mint-shaded) 57%
+    );
+  }
+  55% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 52%,
+      var(--amplify-colors-white) 57%,
+      var(--mint-shaded) 62%
+    );
+  }
+  60% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 57%,
+      var(--amplify-colors-white) 62%,
+      var(--mint-shaded) 67%
+    );
+  }
+  65% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 62%,
+      var(--amplify-colors-white) 67%,
+      var(--mint-shaded) 72%
+    );
+  }
+  70% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 67%,
+      var(--amplify-colors-white) 72%,
+      var(--mint-shaded) 77%
+    );
+  }
+  75% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 72%,
+      var(--amplify-colors-white) 77%,
+      var(--mint-shaded) 82%
+    );
+  }
+  80% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 77%,
+      var(--amplify-colors-white) 82%,
+      var(--mint-shaded) 87%
+    );
+  }
+  85% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 82%,
+      var(--amplify-colors-white) 87%,
+      var(--mint-shaded) 92%
+    );
+  }
+  90% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 87%,
+      var(--amplify-colors-white) 92%,
+      var(--mint-shaded) 97%
+    );
+  }
+  95% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-shaded) 92%,
+      var(--amplify-colors-white) 97%
+    );
+  }
+  100% {
+    background: var(--mint-shaded);
+  }
+}
+
+/* ######################### */
+/* ###### Flare Faded ###### */
+/* ######################### */
+@keyframes button-flare-faded {
+  0% {
+    background: linear-gradient(
+      110deg,
+      var(--amplify-colors-white) 2%,
+      var(--mint-faded) 7%
+    );
+  }
+  5% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 2%,
+      var(--amplify-colors-white) 7%,
+      var(--mint-faded) 12%
+    );
+  }
+  10% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 7%,
+      var(--amplify-colors-white) 12%,
+      var(--mint-faded) 17%
+    );
+  }
+  15% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 12%,
+      var(--amplify-colors-white) 17%,
+      var(--mint-faded) 22%
+    );
+  }
+  20% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 17%,
+      var(--amplify-colors-white) 22%,
+      var(--mint-faded) 27%
+    );
+  }
+  25% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 22%,
+      var(--amplify-colors-white) 27%,
+      var(--mint-faded) 32%
+    );
+  }
+  30% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 27%,
+      var(--amplify-colors-white) 32%,
+      var(--mint-faded) 37%
+    );
+  }
+  35% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 32%,
+      var(--amplify-colors-white) 37%,
+      var(--mint-faded) 42%
+    );
+  }
+  40% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 37%,
+      var(--amplify-colors-white) 42%,
+      var(--mint-faded) 47%
+    );
+  }
+  45% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 42%,
+      var(--amplify-colors-white) 47%,
+      var(--mint-faded) 52%
+    );
+  }
+  50% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 47%,
+      var(--amplify-colors-white) 52%,
+      var(--mint-faded) 57%
+    );
+  }
+  55% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 52%,
+      var(--amplify-colors-white) 57%,
+      var(--mint-faded) 62%
+    );
+  }
+  60% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 57%,
+      var(--amplify-colors-white) 62%,
+      var(--mint-faded) 67%
+    );
+  }
+  65% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 62%,
+      var(--amplify-colors-white) 67%,
+      var(--mint-faded) 72%
+    );
+  }
+  70% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 67%,
+      var(--amplify-colors-white) 72%,
+      var(--mint-faded) 77%
+    );
+  }
+  75% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 72%,
+      var(--amplify-colors-white) 77%,
+      var(--mint-faded) 82%
+    );
+  }
+  80% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 77%,
+      var(--amplify-colors-white) 82%,
+      var(--mint-faded) 87%
+    );
+  }
+  85% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 82%,
+      var(--amplify-colors-white) 87%,
+      var(--mint-faded) 92%
+    );
+  }
+  90% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 87%,
+      var(--amplify-colors-white) 92%,
+      var(--mint-faded) 97%
+    );
+  }
+  95% {
+    background: linear-gradient(
+      110deg,
+      var(--mint-faded) 92%,
+      var(--amplify-colors-white) 97%
+    );
+  }
+  100% {
+    background: var(--mint-faded);
+  }
+}

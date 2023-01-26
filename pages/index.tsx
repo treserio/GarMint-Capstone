@@ -28,7 +28,7 @@ export default function Home() {
           <Authenticator>
             {({ user }) => {
               setUser(user)
-              appContext.getUserGarmints(setAppContext)
+              appContext.getUserData(setAppContext)
               return <></>
             }}
           </Authenticator>

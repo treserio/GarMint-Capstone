@@ -2,7 +2,7 @@ import Weather from '../models/weather'
 
 // api provides 7 days max of weather info
 export default async function fetchWeatherNWS(lat: string, long: string, ...days: Weather[]): Promise<Weather | undefined> {
-  console.log('fetching', lat, long)
+  // console.log('fetching', lat, long)
   if (!days.length || days.length > 7) {
     console.log('fetchWeather can update 7 days worth of weather, 0 or more than 7 requested were requested')
     return undefined
@@ -37,7 +37,7 @@ export default async function fetchWeatherNWS(lat: string, long: string, ...days
     }
     const forecastRes = await fetch(`https://api.weather.gov/gridpoints/${grid.id}/${grid.x},${grid.y}/forecast/hourly`)
     if (forecastRes.status != 200) {
-      // local log file to store info about failure
+      // if error swap coordinates and try again?
       console.log(`Error: https://api.weather.gov/gridpoints/${grid.id}/${grid.x},${grid.y}/forecast/hourly`, forecastRes)
       return undefined
     }
